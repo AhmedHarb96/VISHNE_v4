@@ -9,8 +9,7 @@
 #include "Calculation.h"
 #include "Spectrometer.h"
 #include "LCD.h"
-
-
+#include "RTC.h"
 
 
 
@@ -23,6 +22,8 @@ extern DMA_HandleTypeDef hdma_tim1_ch1;
 extern UART_HandleTypeDef huart2;
 extern DMA_HandleTypeDef hdma_usart2_rx;
 extern SPI_HandleTypeDef hspi3;
+
+extern SPI_HandleTypeDef hi2c3;
 
 extern char message[10];            //Result to be sent to UART and LCD
 

@@ -16,12 +16,14 @@ void systemLoop(void)
 {
 	  spectrometer();
 	  LCD();
+	  RTC_DisplayTime();
 }
 
 void systemSetup(void)
 {
 	   SpectrometerSetup();
 	   LCD_Setup();
+	   RTC_Init();
 }
 
 //################################################################################################//

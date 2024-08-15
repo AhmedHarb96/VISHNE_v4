@@ -10,11 +10,19 @@
 
 volatile uint8_t eos_received = 0;
 
+
 void spectrometer(void)
 {
 	if ((HAL_GPIO_ReadPin(GPIOA, BUTTON_Pin) == GPIO_PIN_RESET) )
 	{
+		if(StartTestMenuFlag==1){
 			generate_spectrometer_signals();
+
+		}else if (StartTestMenuFlag==2) {                               // if current menu != StartTest
+			 HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin, GPIO_PIN_SET);   // ***** ERROR Buzzer ***//
+			 HAL_Delay(1000);
+			 HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin, GPIO_PIN_RESET); // ***** ERROR Buzzer ***//
+		}
 	}
 }
 

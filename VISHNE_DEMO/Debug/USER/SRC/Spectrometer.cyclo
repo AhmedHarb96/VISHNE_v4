@@ -1,7 +1,7 @@
-../USER/SRC/Spectrometer.c:13:6:spectrometer	2
-../USER/SRC/Spectrometer.c:21:6:generate_spectrometer_signals	1
-../USER/SRC/Spectrometer.c:48:6:EXTI4_IRQHandler	1
-../USER/SRC/Spectrometer.c:54:6:HAL_GPIO_EXTI_Callback	2
-../USER/SRC/Spectrometer.c:61:6:DWT_Init	1
-../USER/SRC/Spectrometer.c:70:10:DWT_GetSysClockFreq	1
-../USER/SRC/Spectrometer.c:75:6:DWT_Delay	2
+../USER/SRC/Spectrometer.c:14:6:spectrometer	4
+../USER/SRC/Spectrometer.c:29:6:generate_spectrometer_signals	1
+../USER/SRC/Spectrometer.c:56:6:EXTI4_IRQHandler	1
+../USER/SRC/Spectrometer.c:62:6:HAL_GPIO_EXTI_Callback	2
+../USER/SRC/Spectrometer.c:69:6:DWT_Init	1
+../USER/SRC/Spectrometer.c:78:10:DWT_GetSysClockFreq	1
+../USER/SRC/Spectrometer.c:83:6:DWT_Delay	2

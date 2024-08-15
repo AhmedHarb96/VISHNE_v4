@@ -1,7 +1,7 @@
-../USER/SRC/LCD.c:48:6:LCD	1
-../USER/SRC/LCD.c:64:6:LCD_DisplayMenu	10
-../USER/SRC/LCD.c:167:6:LCD_HandleButtonPress	16
-../USER/SRC/LCD.c:218:6:LCD_UpdateMenu	1
-../USER/SRC/LCD.c:222:6:MeasureAverage	2
-../USER/SRC/LCD.c:231:6:LCD_Reset	2
-../USER/SRC/LCD.c:248:6:DoesTestComplete	3
+../USER/SRC/LCD.c:49:6:LCD	1
+../USER/SRC/LCD.c:65:6:LCD_DisplayMenu	10
+../USER/SRC/LCD.c:170:6:LCD_HandleButtonPress	16
+../USER/SRC/LCD.c:221:6:LCD_UpdateMenu	1
+../USER/SRC/LCD.c:225:6:MeasureAverage	2
+../USER/SRC/LCD.c:234:6:LCD_Reset	2
+../USER/SRC/LCD.c:251:6:DoesTestComplete	3

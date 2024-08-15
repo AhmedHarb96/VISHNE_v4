@@ -27,6 +27,8 @@ Core/Src/ssd1306_tests.o: ../Core/Src/ssd1306_tests.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h \
@@ -37,8 +39,9 @@ Core/Src/ssd1306_tests.o: ../Core/Src/ssd1306_tests.c \
  ../Core/Inc/../../USER/INC/generalHeaders.h \
  ../Core/Inc/../../USER/INC/Calculation.h \
  ../Core/Inc/../../USER/INC/Spectrometer.h \
- ../Core/Inc/../../USER/INC/LCD.h ../Core/Inc/ssd1306_tests.h \
- ../Core/Inc/ssd1306_fonts.h ../Core/Inc/ssd1306.h
+ ../Core/Inc/../../USER/INC/LCD.h ../Core/Inc/../../USER/INC/RTC.h \
+ ../Core/Inc/ssd1306_tests.h ../Core/Inc/ssd1306_fonts.h \
+ ../Core/Inc/ssd1306.h
 ../Core/Inc/ssd1306.h:
 ../Core/Inc/ssd1306_conf.h:
 ../Core/Inc/../../USER/INC/generalHeaders.h:
@@ -69,6 +72,8 @@ Core/Src/ssd1306_tests.o: ../Core/Src/ssd1306_tests.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_i2c_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_spi.h:
@@ -80,6 +85,7 @@ Core/Src/ssd1306_tests.o: ../Core/Src/ssd1306_tests.c \
 ../Core/Inc/../../USER/INC/Calculation.h:
 ../Core/Inc/../../USER/INC/Spectrometer.h:
 ../Core/Inc/../../USER/INC/LCD.h:
+../Core/Inc/../../USER/INC/RTC.h:
 ../Core/Inc/ssd1306_tests.h:
 ../Core/Inc/ssd1306_fonts.h:
 ../Core/Inc/ssd1306.h:

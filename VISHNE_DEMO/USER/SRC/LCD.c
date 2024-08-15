@@ -44,6 +44,7 @@ int menu_line_Y = 22;   //30
 int set_line_X = 40;
 int set_line_Y = 44;   //30
 
+int StartTestMenuFlag = 0;
 
 void LCD(void)
 {
@@ -69,6 +70,7 @@ void LCD_DisplayMenu(void) {
     {
         case MENU_SET_AVG:
         	testDone=0;                       // Do not read any result here
+        	StartTestMenuFlag = 2;
 
         	if (currentCursor == CURSOR_ON_MENU) {
 				ssd1306_FillRectangle(menu_line_X-5, menu_line_Y-5, 90, 35, White);
@@ -76,7 +78,7 @@ void LCD_DisplayMenu(void) {
 				ssd1306_WriteString("Set AVG", Font_7x10, Black);
         	}else{
 				ssd1306_SetCursor(menu_line_X, menu_line_Y);
-				ssd1306_WriteString("Set AVG", Font_7x10, White);
+				ssd1306_WriteString(" Set AVG", Font_7x10, White);
         	}
 
 
@@ -105,7 +107,7 @@ void LCD_DisplayMenu(void) {
             break;
 
         case MENU_START_TEST:
-
+        	StartTestMenuFlag = 1;
             /*if (currentCursor == CURSOR_ON_VALUE) {
             	ssd1306_SetCursor(100, 14);
                 ssd1306_WriteString("<-", Font_7x10, White);
@@ -141,6 +143,7 @@ void LCD_DisplayMenu(void) {
             break;
 
         case MENU_SHOW_RESULT:
+        	StartTestMenuFlag = 2;
             //ssd1306_SetCursor(menu_line_X, menu_line_Y);
             //ssd1306_WriteString("Result", Font_7x10, White);
             if (currentCursor == CURSOR_ON_MENU){

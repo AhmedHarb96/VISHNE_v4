@@ -1,0 +1,6 @@
+../USER/SRC/RTC.c:17:9:decToBcd	16	static
+../USER/SRC/RTC.c:21:5:bcdToDec	16	static
+../USER/SRC/RTC.c:26:6:RTC_Init	24	static
+../USER/SRC/RTC.c:33:6:RTC_SetTime	40	static
+../USER/SRC/RTC.c:48:6:RTC_GetTime	48	static
+../USER/SRC/RTC.c:64:6:RTC_DisplayTime	64	static

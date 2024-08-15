@@ -11,6 +11,7 @@
 #include "generalHeaders.h"
 
 extern uint8_t testDone;
+extern int StartTestMenuFlag;
 
 void spectrometer(void);
 void generate_spectrometer_signals(void);

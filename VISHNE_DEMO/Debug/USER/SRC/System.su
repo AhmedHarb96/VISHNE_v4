@@ -1,6 +1,6 @@
 ../USER/SRC/System.c:15:6:systemLoop	8	static
-../USER/SRC/System.c:21:6:systemSetup	8	static
-../USER/SRC/System.c:29:6:SpectrometerSetup	8	static
-../USER/SRC/System.c:39:6:LCD_Setup	8	static
-../USER/SRC/System.c:47:6:Aymed_Logo	16	static
-../USER/SRC/System.c:56:6:Aymed_Text	16	static
+../USER/SRC/System.c:22:6:systemSetup	8	static
+../USER/SRC/System.c:31:6:SpectrometerSetup	8	static
+../USER/SRC/System.c:41:6:LCD_Setup	8	static
+../USER/SRC/System.c:49:6:Aymed_Logo	16	static
+../USER/SRC/System.c:58:6:Aymed_Text	16	static
