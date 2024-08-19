@@ -21,6 +21,10 @@ void LCD_Init(void);
 void LCD(void);
 void LCD_DisplayMenu(void);
 void LCD_HandleButtonPress(void);
+void EditRTC();
+void HighlightNumber(int x, int y, const char* format, int value);
+
+
 void LCD_UpdateMenu(void);
 void MeasureAverage(void);
 void CompleteTest(void);

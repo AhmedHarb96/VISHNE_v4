@@ -3,4 +3,4 @@
 ../USER/SRC/RTC.c:26:6:RTC_Init	1
 ../USER/SRC/RTC.c:33:6:RTC_SetTime	1
 ../USER/SRC/RTC.c:48:6:RTC_GetTime	1
-../USER/SRC/RTC.c:64:6:RTC_DisplayTime	1
+../USER/SRC/RTC.c:64:6:RTC_DisplayTime	3

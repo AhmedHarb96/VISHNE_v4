@@ -62,22 +62,33 @@ void RTC_GetTime(uint8_t* hours, uint8_t* minutes, uint8_t* seconds, uint8_t* da
 
 // Function to display the time and date on the OLED
 void RTC_DisplayTime(void) {
+	static char prevBuffer[20] = {0};
     uint8_t hours, minutes, seconds, day, date, month, year;
     char buffer[20];
 
     RTC_GetTime(&hours, &minutes, &seconds, &day, &date, &month, &year);
 
-    ssd1306_Fill(Black);
+    //ssd1306_Fill(Black);
 
     // Format time
     snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, minutes, seconds);
-    ssd1306_SetCursor(2, 0);
-    ssd1306_WriteString(buffer, Font_6x8 ,White);
+    if (strcmp(buffer, prevBuffer) != 0) {
+		ssd1306_SetCursor(2, 0);
+		ssd1306_WriteString(buffer, Font_6x8 ,White);
+		strcpy(prevBuffer, buffer);
+	}
+    //ssd1306_SetCursor(2, 0);
+    //ssd1306_WriteString(buffer, Font_6x8 ,White);
 
     // Format date
     snprintf(buffer, sizeof(buffer), "%02d/%02d/20%02d", date, month, year);
-    ssd1306_SetCursor(68, 0);
-    ssd1306_WriteString(buffer,Font_6x8, White);
+    if (strcmp(buffer, prevBuffer) != 0) {
+	   ssd1306_SetCursor(68, 0);
+	   ssd1306_WriteString(buffer, Font_6x8, White);
+	   strcpy(prevBuffer, buffer);
+   }
+    //ssd1306_SetCursor(68, 0);
+    //ssd1306_WriteString(buffer,Font_6x8, White);
 
-    ssd1306_UpdateScreen();
+    //ssd1306_UpdateScreen();
 }

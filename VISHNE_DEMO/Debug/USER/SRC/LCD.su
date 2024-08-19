@@ -1,7 +1,9 @@
-../USER/SRC/LCD.c:49:6:LCD	8	static
-../USER/SRC/LCD.c:65:6:LCD_DisplayMenu	80	static
-../USER/SRC/LCD.c:170:6:LCD_HandleButtonPress	8	static
-../USER/SRC/LCD.c:221:6:LCD_UpdateMenu	8	static
-../USER/SRC/LCD.c:225:6:MeasureAverage	16	static
-../USER/SRC/LCD.c:234:6:LCD_Reset	16	static
-../USER/SRC/LCD.c:251:6:DoesTestComplete	8	static
+../USER/SRC/LCD.c:55:6:LCD	8	static
+../USER/SRC/LCD.c:71:6:LCD_DisplayMenu	80	static
+../USER/SRC/LCD.c:198:6:LCD_HandleButtonPress	8	static
+../USER/SRC/LCD.c:258:6:HighlightNumber	56	static
+../USER/SRC/LCD.c:266:6:EditRTC	40	static
+../USER/SRC/LCD.c:381:6:LCD_UpdateMenu	8	static
+../USER/SRC/LCD.c:385:6:MeasureAverage	16	static
+../USER/SRC/LCD.c:394:6:LCD_Reset	16	static
+../USER/SRC/LCD.c:411:6:DoesTestComplete	8	static
