@@ -8,7 +8,7 @@
 
 #include "../INC/generalHeaders.h"
 
-volatile uint8_t eos_received = 0;
+  uint8_t eos_received = 0;  //volatile
 
 
 void spectrometer(void)
@@ -58,12 +58,13 @@ void EXTI4_IRQHandler(void)
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4);
 }
 
-// Callback for EOS interrupt
+// Callback for EOS interrupt  (in System.c)
+/*
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (GPIO_Pin == GPIO_PIN_4) {
         eos_received = 1;
     }
-}
+}*/
 /////////////////////////////////////// us Delay Timer ///////////////////////////////////////////
 // Function to initialize the DWT unit
 void DWT_Init(void) {

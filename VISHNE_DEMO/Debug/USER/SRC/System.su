@@ -1,6 +1,11 @@
-../USER/SRC/System.c:15:6:systemLoop	8	static
-../USER/SRC/System.c:22:6:systemSetup	8	static
-../USER/SRC/System.c:31:6:SpectrometerSetup	8	static
-../USER/SRC/System.c:41:6:LCD_Setup	8	static
-../USER/SRC/System.c:49:6:Aymed_Logo	16	static
-../USER/SRC/System.c:58:6:Aymed_Text	16	static
+../Drivers/CMSIS/Include/core_cm4.h:1684:22:__NVIC_EnableIRQ	16	static,ignoring_inline_asm
+../USER/SRC/System.c:20:6:systemLoop	8	static
+../USER/SRC/System.c:27:6:systemSetup	8	static
+../USER/SRC/System.c:36:6:SpectrometerSetup	8	static
+../USER/SRC/System.c:46:6:LCD_Setup	16	static
+../USER/SRC/System.c:60:6:Aymed_Logo	16	static
+../USER/SRC/System.c:69:6:Aymed_Text	16	static
+../USER/SRC/System.c:83:6:BatteryLevelFilterInit	16	static
+../USER/SRC/System.c:93:6:TIM11_Init	8	static
+../USER/SRC/System.c:111:6:EXTI9_5_IRQHandler	8	static
+../USER/SRC/System.c:117:6:HAL_GPIO_EXTI_Callback	16	static

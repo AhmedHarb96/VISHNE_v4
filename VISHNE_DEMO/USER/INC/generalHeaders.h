@@ -4,6 +4,7 @@
 #include "stdio.h"
 #include <math.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "System.h"
 #include "Calculation.h"
@@ -17,6 +18,7 @@ extern ADC_HandleTypeDef hadc3;
 extern DMA_HandleTypeDef hdma_adc3;
 
 extern TIM_HandleTypeDef htim1;
+extern TIM_HandleTypeDef htim11;
 extern DMA_HandleTypeDef hdma_tim1_ch1;
 
 extern UART_HandleTypeDef huart2;
@@ -24,8 +26,10 @@ extern DMA_HandleTypeDef hdma_usart2_rx;
 extern SPI_HandleTypeDef hspi3;
 
 extern SPI_HandleTypeDef hi2c3;
+extern ADC_HandleTypeDef hadc1;
 
 extern char message[10];            //Result to be sent to UART and LCD
+
 
 //#define BUTTON_PIN GPIO_PIN_5
 //#define LED_PIN GPIO_PIN_6
@@ -49,5 +53,6 @@ extern char message[10];            //Result to be sent to UART and LCD
 //#define NUM_CALIBRATION_POINTS 5
 */
 //-----------------------------------------------------
+
 
 

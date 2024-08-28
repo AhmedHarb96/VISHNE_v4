@@ -75,7 +75,7 @@ void ssd1306_Init(void) {
     ssd1306_Reset();
 
     // Wait for the screen to boot
-    HAL_Delay(100);
+    HAL_Delay(10);  //10
 
     // Init OLED
     ssd1306_SetDisplayOn(0); //display off
@@ -171,6 +171,73 @@ void ssd1306_Init(void) {
     SSD1306.Initialized = 1;
 }
 
+uint8_t SSD1306_Init2(void)
+{
+	// Reset OLED
+	    ssd1306_Reset();
+
+	    // Wait for the screen to boot
+	    HAL_Delay(10);
+
+	 //OLED_SPI_Pins_Init();
+
+	 //OLED_SPI_Configure();
+	/* A little delay */
+	//uint32_t p = 2500;
+	//while(p>0)
+	//	p--;
+
+	/* Init LCD */
+	ssd1306_WriteCommand(0xAE); //display off
+	ssd1306_WriteCommand(0x20); //Set Memory Addressing Mode
+	ssd1306_WriteCommand(0x10); //00,Horizontal Addressing Mode;01,Vertical Addressing Mode;10,Page Addressing Mode (RESET);11,Invalid
+	ssd1306_WriteCommand(0xB0); //Set Page Start Address for Page Addressing Mode,0-7
+	ssd1306_WriteCommand(0xC8); //Set COM Output Scan Direction
+	ssd1306_WriteCommand(0x00); //---set low column address
+	ssd1306_WriteCommand(0x10); //---set high column address
+	ssd1306_WriteCommand(0x40); //--set start line address
+	ssd1306_WriteCommand(0x81); //--set contrast control register
+	ssd1306_WriteCommand(0xFF);
+	ssd1306_WriteCommand(0xA1); //--set segment re-map 0 to 127
+	ssd1306_WriteCommand(0xA6); //--set normal display
+	ssd1306_WriteCommand(0xA8); //--set multiplex ratio(1 to 64)
+	ssd1306_WriteCommand(0x3F); //
+	ssd1306_WriteCommand(0xA4); //0xa4,Output follows RAM content;0xa5,Output ignores RAM content
+	ssd1306_WriteCommand(0xD3); //-set display offset
+	ssd1306_WriteCommand(0x00); //-not offset
+	ssd1306_WriteCommand(0xD5); //--set display clock divide ratio/oscillator frequency
+	ssd1306_WriteCommand(0xF0); //--set divide ratio
+	ssd1306_WriteCommand(0xD9); //--set pre-charge period
+	ssd1306_WriteCommand(0x22); //
+	ssd1306_WriteCommand(0xDA); //--set com pins hardware configuration
+	ssd1306_WriteCommand(0x12);
+	ssd1306_WriteCommand(0xDB); //--set vcomh
+	ssd1306_WriteCommand(0x20); //0x20,0.77xVcc
+	ssd1306_WriteCommand(0x8D); //--set DC-DC enable
+	ssd1306_WriteCommand(0x14); //
+	ssd1306_WriteCommand(0xAF); //--turn on SSD1306 panel
+
+
+	//ssd1306_WriteCommand(SSD1306_DEACTIVATE_SCROLL);
+	ssd1306_Fill(Black);
+	ssd1306_UpdateScreen();
+
+	/* Clear screen */
+	//SSD1306_Fill(SSD1306_COLOR_BLACK);
+
+	/* Update screen */
+	//SSD1306_UpdateScreen();
+
+	/* Set default values */
+	SSD1306.CurrentX = 0;
+	SSD1306.CurrentY = 0;
+
+	/* Initialized OK */
+	SSD1306.Initialized = 1;
+
+	/* Return OK */
+	return 1;
+}
 /* Fill the whole screen with the given color */
 void ssd1306_Fill(SSD1306_COLOR color) {
     memset(SSD1306_Buffer, (color == Black) ? 0x00 : 0xFF, sizeof(SSD1306_Buffer));
@@ -589,3 +656,31 @@ void ssd1306_SetDisplayOn(const uint8_t on) {
 uint8_t ssd1306_GetDisplayOn() {
     return SSD1306.DisplayOn;
 }
+
+//*********************************************************************************************//
+// For 16*8
+void OLED_DrawBitmap(uint8_t x, uint8_t y, const uint8_t* bitmap, uint8_t width, uint8_t height) {
+    for (uint8_t i = 0; i < height; i++) {
+        for (uint8_t j = 0; j < width; j++) {
+            if (bitmap[i] & (1 << j)) {
+            	ssd1306_DrawPixel(x + j, y + i, White);  // Draw pixel if bit is set
+            } else {
+            	ssd1306_DrawPixel(x + j, y + i, Black);  // Clear pixel if bit is not set
+            }
+        }
+    }
+}
+
+// For 26*16
+/*void OLED_DrawBitmap(uint8_t x, uint8_t y, const uint8_t* bitmap, uint8_t width, uint8_t height) {
+    for (uint8_t i = 0; i < height; i++) {
+        for (uint8_t j = 0; j < width; j++) {
+            if (bitmap[i * (width / 8) + (j / 8)] & (1 << (7 - (j % 8)))) {
+            	ssd1306_DrawPixel(x + j, y + i, White);  // Draw pixel if bit is set
+            } else {
+            	ssd1306_DrawPixel(x + j, y + i, Black);  // Clear pixel if bit is not set
+            }
+        }
+    }
+}
+*/

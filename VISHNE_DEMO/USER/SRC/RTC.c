@@ -81,9 +81,9 @@ void RTC_DisplayTime(void) {
     //ssd1306_WriteString(buffer, Font_6x8 ,White);
 
     // Format date
-    snprintf(buffer, sizeof(buffer), "%02d/%02d/20%02d", date, month, year);
+    snprintf(buffer, sizeof(buffer), "%02d/%02d/%02d", date, month, year);
     if (strcmp(buffer, prevBuffer) != 0) {
-	   ssd1306_SetCursor(68, 0);
+	   ssd1306_SetCursor(80, 0);
 	   ssd1306_WriteString(buffer, Font_6x8, White);
 	   strcpy(prevBuffer, buffer);
    }

@@ -12,6 +12,7 @@
 
 extern uint8_t testDone;
 extern int StartTestMenuFlag;
+extern uint8_t eos_received;
 
 void spectrometer(void);
 void generate_spectrometer_signals(void);
