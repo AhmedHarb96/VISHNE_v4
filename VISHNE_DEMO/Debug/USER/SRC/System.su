@@ -3,9 +3,9 @@
 ../USER/SRC/System.c:27:6:systemSetup	8	static
 ../USER/SRC/System.c:36:6:SpectrometerSetup	8	static
 ../USER/SRC/System.c:46:6:LCD_Setup	16	static
-../USER/SRC/System.c:60:6:Aymed_Logo	16	static
-../USER/SRC/System.c:69:6:Aymed_Text	16	static
-../USER/SRC/System.c:83:6:BatteryLevelFilterInit	16	static
-../USER/SRC/System.c:93:6:TIM11_Init	8	static
-../USER/SRC/System.c:111:6:EXTI9_5_IRQHandler	8	static
-../USER/SRC/System.c:117:6:HAL_GPIO_EXTI_Callback	16	static
+../USER/SRC/System.c:61:6:Aymed_Logo	16	static
+../USER/SRC/System.c:70:6:Aymed_Text	16	static
+../USER/SRC/System.c:84:6:BatteryLevelFilterInit	16	static
+../USER/SRC/System.c:94:6:TIM11_Init	8	static
+../USER/SRC/System.c:112:6:EXTI9_5_IRQHandler	8	static
+../USER/SRC/System.c:118:6:HAL_GPIO_EXTI_Callback	16	static

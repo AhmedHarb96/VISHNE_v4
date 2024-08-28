@@ -45,7 +45,6 @@ ADC_HandleTypeDef hadc3;
 DMA_HandleTypeDef hdma_adc1;
 DMA_HandleTypeDef hdma_adc3;
 
-I2C_HandleTypeDef hi2c2;
 I2C_HandleTypeDef hi2c3;
 
 SPI_HandleTypeDef hspi3;
@@ -69,7 +68,6 @@ static void MX_TIM1_Init(void);
 static void MX_ADC3_Init(void);
 static void MX_SPI3_Init(void);
 static void MX_I2C3_Init(void);
-static void MX_I2C2_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM11_Init(void);
 /* USER CODE BEGIN PFP */
@@ -116,7 +114,6 @@ int main(void)
   MX_ADC3_Init();
   MX_SPI3_Init();
   MX_I2C3_Init();
-  MX_I2C2_Init();
   MX_ADC1_Init();
   MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
@@ -286,40 +283,6 @@ static void MX_ADC3_Init(void)
   /* USER CODE BEGIN ADC3_Init 2 */
 
   /* USER CODE END ADC3_Init 2 */
-
-}
-
-/**
-  * @brief I2C2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_I2C2_Init(void)
-{
-
-  /* USER CODE BEGIN I2C2_Init 0 */
-
-  /* USER CODE END I2C2_Init 0 */
-
-  /* USER CODE BEGIN I2C2_Init 1 */
-
-  /* USER CODE END I2C2_Init 1 */
-  hi2c2.Instance = I2C2;
-  hi2c2.Init.ClockSpeed = 100000;
-  hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c2.Init.OwnAddress1 = 0;
-  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c2.Init.OwnAddress2 = 0;
-  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN I2C2_Init 2 */
-
-  /* USER CODE END I2C2_Init 2 */
 
 }
 
@@ -590,7 +553,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(SPEC_LED_GPIO_Port, SPEC_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin|READY_LED_Pin, GPIO_PIN_RESET);
@@ -599,26 +562,26 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOD, LCD_CE_Pin|LCD_DC_Pin|LCD_RST_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, SPEC_START_Pin|SPEC_CLK_Pin|SPEC_EOS_Pin|SPEC_GAIN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, SPEC_START_Pin|SPEC_GAIN_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : EOS_Pin */
-  GPIO_InitStruct.Pin = EOS_Pin;
+  /*Configure GPIO pin : SPEC_EOS_Pin */
+  GPIO_InitStruct.Pin = SPEC_EOS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(EOS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(SPEC_EOS_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : BUTTON_Pin */
-  GPIO_InitStruct.Pin = BUTTON_Pin;
+  /*Configure GPIO pin : StartTest_BTN_Pin */
+  GPIO_InitStruct.Pin = StartTest_BTN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(BUTTON_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(StartTest_BTN_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LED_Pin */
-  GPIO_InitStruct.Pin = LED_Pin;
+  /*Configure GPIO pin : SPEC_LED_Pin */
+  GPIO_InitStruct.Pin = SPEC_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(SPEC_LED_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : NAVIGATE_BTN_Pin */
   GPIO_InitStruct.Pin = NAVIGATE_BTN_Pin;
@@ -639,11 +602,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PD8 */
-  GPIO_InitStruct.Pin = GPIO_PIN_8;
+  /*Configure GPIO pin : IsCharging_EXTI_Pin */
+  GPIO_InitStruct.Pin = IsCharging_EXTI_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+  HAL_GPIO_Init(IsCharging_EXTI_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LCD_CE_Pin LCD_DC_Pin LCD_RST_Pin */
   GPIO_InitStruct.Pin = LCD_CE_Pin|LCD_DC_Pin|LCD_RST_Pin;
@@ -652,8 +615,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : SPEC_START_Pin SPEC_CLK_Pin SPEC_EOS_Pin SPEC_GAIN_Pin */
-  GPIO_InitStruct.Pin = SPEC_START_Pin|SPEC_CLK_Pin|SPEC_EOS_Pin|SPEC_GAIN_Pin;
+  /*Configure GPIO pins : SPEC_START_Pin SPEC_GAIN_Pin */
+  GPIO_InitStruct.Pin = SPEC_START_Pin|SPEC_GAIN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

@@ -388,7 +388,7 @@ void EditRTC() {
 
 
 // Function to calculate battery percentage
-void BatteryPercentage(void) {
+void BatteryPercentage(void) {                  //NOTE: With TMR: Calculate Percenatge Every 5 sec & Filter Window = 5 & UPDATE_THRESHOLD = 5
 
 	//HAL_ADC_Start(&hadc1);
 	//HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
@@ -411,12 +411,6 @@ void BatteryPercentage(void) {
 
 }
 
-/*void InitBatteryPercentage(void) {
-	HAL_ADC_Start_DMA(&hadc1, &adcValue1, 1);
-	batteryVoltage0 = (adcValue1 / 4575.0) * 3.3; //4095.0 // Convert ADC value to voltage
-	batteryVoltage0 *= 1.69;
-	percentage = CalculateBatteryPercentage(batteryVoltage0);
-}*/
 
 float CalculateBatteryPercentage(float batteryVoltage) {
     float percentage;
@@ -472,8 +466,7 @@ void DisplayPercentage(void) {
 	}
 	else{
 		// Clear the area where the charging symbol would be
-		//ssd1306_ClearArea(98, 12, 8, 8);
-		ssd1306_FillRectangle(99, 12, 106, 20, Black);
+		ssd1306_FillRectangle(99, 12, 106, 20, Black);                 //ssd1306_ClearArea
 	}
 
 }

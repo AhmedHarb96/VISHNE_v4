@@ -59,14 +59,20 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define EOS_Pin GPIO_PIN_4
-#define EOS_GPIO_Port GPIOA
-#define BUTTON_Pin GPIO_PIN_5
-#define BUTTON_GPIO_Port GPIOA
-#define LED_Pin GPIO_PIN_6
-#define LED_GPIO_Port GPIOA
+#define BATT_LEVEL_Pin GPIO_PIN_0
+#define BATT_LEVEL_GPIO_Port GPIOA
+#define SPEC_VIDEO_Pin GPIO_PIN_1
+#define SPEC_VIDEO_GPIO_Port GPIOA
+#define SPEC_EOS_Pin GPIO_PIN_4
+#define SPEC_EOS_GPIO_Port GPIOA
+#define StartTest_BTN_Pin GPIO_PIN_5
+#define StartTest_BTN_GPIO_Port GPIOA
+#define SPEC_LED_Pin GPIO_PIN_6
+#define SPEC_LED_GPIO_Port GPIOA
 #define NAVIGATE_BTN_Pin GPIO_PIN_1
 #define NAVIGATE_BTN_GPIO_Port GPIOB
+#define SPEC_CLK_Pin GPIO_PIN_9
+#define SPEC_CLK_GPIO_Port GPIOE
 #define ERR_BUZZER_Pin GPIO_PIN_12
 #define ERR_BUZZER_GPIO_Port GPIOE
 #define READY_LED_Pin GPIO_PIN_13
@@ -75,10 +81,12 @@ void Error_Handler(void);
 #define NEXT_BTN_GPIO_Port GPIOE
 #define PREV_BTN_Pin GPIO_PIN_15
 #define PREV_BTN_GPIO_Port GPIOE
-#define LCD_SCL_Pin GPIO_PIN_10
-#define LCD_SCL_GPIO_Port GPIOB
-#define LCD_SDA_Pin GPIO_PIN_11
-#define LCD_SDA_GPIO_Port GPIOB
+#define IsCharging_EXTI_Pin GPIO_PIN_8
+#define IsCharging_EXTI_GPIO_Port GPIOD
+#define RTC_SDA_Pin GPIO_PIN_9
+#define RTC_SDA_GPIO_Port GPIOC
+#define RTC_SCL_Pin GPIO_PIN_8
+#define RTC_SCL_GPIO_Port GPIOA
 #define LCD_CE_Pin GPIO_PIN_0
 #define LCD_CE_GPIO_Port GPIOD
 #define LCD_DC_Pin GPIO_PIN_1
@@ -87,10 +95,6 @@ void Error_Handler(void);
 #define LCD_RST_GPIO_Port GPIOD
 #define SPEC_START_Pin GPIO_PIN_5
 #define SPEC_START_GPIO_Port GPIOB
-#define SPEC_CLK_Pin GPIO_PIN_6
-#define SPEC_CLK_GPIO_Port GPIOB
-#define SPEC_EOS_Pin GPIO_PIN_7
-#define SPEC_EOS_GPIO_Port GPIOB
 #define SPEC_GAIN_Pin GPIO_PIN_8
 #define SPEC_GAIN_GPIO_Port GPIOB
 

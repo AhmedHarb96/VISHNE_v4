@@ -13,14 +13,14 @@
 
 void spectrometer(void)
 {
-	if ((HAL_GPIO_ReadPin(GPIOA, BUTTON_Pin) == GPIO_PIN_RESET) )
+	if ((HAL_GPIO_ReadPin(GPIOA, StartTest_BTN_Pin) == GPIO_PIN_RESET) )
 	{
 		if(StartTestMenuFlag==1){
 			generate_spectrometer_signals();
 
 		}else if (StartTestMenuFlag==2) {                               // if current menu != StartTest
 			 HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin, GPIO_PIN_SET);   // ***** ERROR Buzzer ***//
-			 HAL_Delay(1000);
+			 HAL_Delay(500);
 			 HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin, GPIO_PIN_RESET); // ***** ERROR Buzzer ***//
 		}
 	}
@@ -30,7 +30,7 @@ void generate_spectrometer_signals(void)
 {
 
 	// Button is pressed
-	HAL_GPIO_WritePin(GPIOA, LED_Pin, GPIO_PIN_SET); // Turn on the LED
+	HAL_GPIO_WritePin(GPIOA, SPEC_LED_Pin, GPIO_PIN_SET); 				// Turn on the LED
 	HAL_Delay(1); // Wait for stabilization
 
 	// Generate start signal for the spectrometer
@@ -46,7 +46,7 @@ void generate_spectrometer_signals(void)
 	// Wait for EOS signal
 	//while (!eos_received) {}
 	capture_and_send_data();
-	HAL_GPIO_WritePin(GPIOA, LED_Pin, GPIO_PIN_RESET); 			// Turn off the LED
+	HAL_GPIO_WritePin(GPIOA, SPEC_LED_Pin, GPIO_PIN_RESET); 			// Turn off the LED
 	eos_received = 0;
 
 }

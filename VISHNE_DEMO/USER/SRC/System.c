@@ -40,11 +40,12 @@ void SpectrometerSetup(void)
 
 	  HAL_GPIO_WritePin(GPIOB, SPEC_START_Pin, GPIO_PIN_SET);
 	  HAL_GPIO_WritePin(GPIOB, SPEC_CLK_Pin|SPEC_EOS_Pin|SPEC_GAIN_Pin, GPIO_PIN_RESET);
-	  HAL_GPIO_WritePin(GPIOA, LED_Pin, GPIO_PIN_RESET); // Turn off the LED
+	  HAL_GPIO_WritePin(GPIOA, SPEC_LED_Pin, GPIO_PIN_RESET); // Turn off the SPEC LED
 }
 
 void LCD_Setup(void)
 {
+	  HAL_GPIO_WritePin(GPIOA, SPEC_LED_Pin, GPIO_PIN_RESET); // Turn off the SPEC LED
 	  ssd1306_Init();
 
 	  BatteryLevelFilterInit();
@@ -125,7 +126,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 		}
     }
 
-    if (GPIO_Pin == GPIO_PIN_4) {         							  // Callback for EOS interrupt
+    if (GPIO_Pin == GPIO_PIN_4) {         							  // Callback for SPEC_EOS interrupt
         eos_received = 1;
     }
 }
