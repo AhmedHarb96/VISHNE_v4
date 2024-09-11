@@ -16,6 +16,7 @@ extern uint8_t eos_received;
 
 void spectrometer(void);
 void generate_spectrometer_signals(void);
+void Send_UART_BLE(void);
 
 void DWT_Init(void);
 void DWT_Delay(uint32_t us);

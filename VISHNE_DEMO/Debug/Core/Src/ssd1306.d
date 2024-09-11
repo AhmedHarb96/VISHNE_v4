@@ -34,11 +34,14 @@ Core/Src/ssd1306.o: ../Core/Src/ssd1306.c ../Core/Inc/ssd1306.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Core/Inc/../../USER/INC/System.h \
  ../Core/Inc/../../USER/INC/generalHeaders.h \
  ../Core/Inc/../../USER/INC/Calculation.h \
  ../Core/Inc/../../USER/INC/Spectrometer.h \
- ../Core/Inc/../../USER/INC/LCD.h ../Core/Inc/../../USER/INC/RTC.h
+ ../Core/Inc/../../USER/INC/LCD.h ../Core/Inc/../../USER/INC/RTC.h \
+ ../Core/Inc/../../USER/INC/Flash.h
 ../Core/Inc/ssd1306.h:
 ../Core/Inc/ssd1306_conf.h:
 ../Core/Inc/../../USER/INC/generalHeaders.h:
@@ -77,9 +80,12 @@ Core/Src/ssd1306.o: ../Core/Src/ssd1306.c ../Core/Inc/ssd1306.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
 ../Core/Inc/../../USER/INC/System.h:
 ../Core/Inc/../../USER/INC/generalHeaders.h:
 ../Core/Inc/../../USER/INC/Calculation.h:
 ../Core/Inc/../../USER/INC/Spectrometer.h:
 ../Core/Inc/../../USER/INC/LCD.h:
 ../Core/Inc/../../USER/INC/RTC.h:
+../Core/Inc/../../USER/INC/Flash.h:

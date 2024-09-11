@@ -26,6 +26,8 @@ void systemLoop(void)
 
 void systemSetup(void)
 {
+	  //EraseAllBilFlashSectors();            // to reset flash
+
 	  SpectrometerSetup();
 	  LCD_Setup();
 	  RTC_Init();
@@ -98,7 +100,7 @@ void TIM11_Init(void) {
 
     // Configure TIM2: 1 tick per millisecond (assuming 16 MHz clock with APB1 prescaler 4)
     TIM11->PSC = 36000 - 1;      // Prescaler: 16 MHz / 16000 = 1 kHz (1 ms period)
-    TIM11->ARR = 10000 - 1;      //4000=2 sec // Auto-reload: 1 kHz / 30000 = 0.033 Hz (30 second period)  10000 = 5 sec
+    TIM11->ARR = 14000 - 1;      //4000=2 sec // Auto-reload: 1 kHz / 30000 = 0.033 Hz (30 second period)  10000 = 5 sec
     TIM11->CR1 |= TIM_CR1_CEN;   // Enable counter
 
     // Enable TIM2 interrupt

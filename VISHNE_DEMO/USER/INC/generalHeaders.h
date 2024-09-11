@@ -11,7 +11,7 @@
 #include "Spectrometer.h"
 #include "LCD.h"
 #include "RTC.h"
-
+#include "Flash.h"
 
 
 extern ADC_HandleTypeDef hadc3;
@@ -27,6 +27,8 @@ extern SPI_HandleTypeDef hspi3;
 
 extern SPI_HandleTypeDef hi2c3;
 extern ADC_HandleTypeDef hadc1;
+
+extern UART_HandleTypeDef huart3;
 
 extern char message[10];            //Result to be sent to UART and LCD
 

@@ -165,8 +165,9 @@ void LCD_DisplayMenu(void) {
 
             if (currentTest > avgValue){
             	currentTest = 1;
-            	//*********AVG***********//
-            	MeasureAverage(); HAL_Delay(10);
+            	//*********Bil_AVG and FlashWrite***********//
+            	MeasureAverage(); //HAL_Delay(10);
+            	SaveBilResultToFlash();
             	//***********************//
                 currentMenu = MENU_SHOW_RESULT;
                 LCD_DisplayMenu();

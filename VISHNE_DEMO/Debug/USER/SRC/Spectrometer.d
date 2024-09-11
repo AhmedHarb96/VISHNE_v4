@@ -34,9 +34,12 @@ USER/SRC/Spectrometer.o: ../USER/SRC/Spectrometer.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../USER/SRC/../INC/System.h ../USER/SRC/../INC/generalHeaders.h \
  ../USER/SRC/../INC/Calculation.h ../USER/SRC/../INC/Spectrometer.h \
- ../USER/SRC/../INC/LCD.h ../USER/SRC/../INC/RTC.h
+ ../USER/SRC/../INC/LCD.h ../USER/SRC/../INC/RTC.h \
+ ../USER/SRC/../INC/Flash.h
 ../USER/SRC/../INC/generalHeaders.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -73,9 +76,12 @@ USER/SRC/Spectrometer.o: ../USER/SRC/Spectrometer.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
 ../USER/SRC/../INC/System.h:
 ../USER/SRC/../INC/generalHeaders.h:
 ../USER/SRC/../INC/Calculation.h:
 ../USER/SRC/../INC/Spectrometer.h:
 ../USER/SRC/../INC/LCD.h:
 ../USER/SRC/../INC/RTC.h:
+../USER/SRC/../INC/Flash.h:

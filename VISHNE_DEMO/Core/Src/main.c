@@ -18,9 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "usb_host.h"
+//#include "../../USER/INC/generalHeaders.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "usbh_hid.h"
+#include "stdio.h"
+#include "usbh_hid_keybd.h"
 
 /* USER CODE END Includes */
 
@@ -54,6 +58,9 @@ TIM_HandleTypeDef htim11;
 DMA_HandleTypeDef hdma_tim1_ch1;
 
 UART_HandleTypeDef huart2;
+UART_HandleTypeDef huart3;
+DMA_HandleTypeDef hdma_usart2_tx;
+DMA_HandleTypeDef hdma_usart3_tx;
 
 /* USER CODE BEGIN PV */
 
@@ -70,13 +77,41 @@ static void MX_SPI3_Init(void);
 static void MX_I2C3_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM11_Init(void);
+static void MX_USART3_UART_Init(void);
+void MX_USB_HOST_Process(void);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+//char barcodeData[128];  // Buffer to hold the barcode data
+//int barcodeIndex = 0;   // Index to track barcode data
+/*char Uart_Buf[100];
+void USBH_HID_EventCallback(USBH_HandleTypeDef *phost){
 
+	if(USBH_HID_GetDeviceType(phost) == HID_MOUSE){
+		HID_MOUSE_Info_TypeDef *Mouse_Info;
+		Mouse_Info = USBH_HID_GetMouseInfo(phost);
+		int X_VAL = Mouse_Info->x;
+		int Y_VAL = Mouse_Info->y;
+		if(X_VAL > 127) X_VAL -= 255;
+		if(Y_VAL > 127) Y_VAL -= 255;
+
+		int len = sprintf(Uart_Buf, "X=%d, Y=%d, Button1=%d, Button2=%d, Button3=%d\n", X_VAL, Y_VAL, \
+				Mouse_Info->buttons[0], Mouse_Info->buttons[1], Mouse_Info->buttons[2]);
+		HAL_UART_Transmit(&huart2, (uint8_t *)Uart_Buf, len, 1000);
+	}
+	if(USBH_HID_GetDeviceType(phost) == HID_KEYBOARD){
+		HID_KEYBD_Info_TypeDef *Keyboard_Info;
+		Keyboard_Info = USBH_HID_GetKeybdInfo(phost);
+		char key = USBH_HID_GetASCIICode(Keyboard_Info);
+		int len = sprintf(Uart_Buf, "Key Pressed = %c \n", key);
+		HAL_UART_Transmit(&huart2, (uint8_t *)Uart_Buf, len, 1000);
+	}
+
+}*/
 /* USER CODE END 0 */
 
 /**
@@ -116,12 +151,21 @@ int main(void)
   MX_I2C3_Init();
   MX_ADC1_Init();
   MX_TIM11_Init();
+  MX_USART3_UART_Init();
+  MX_USB_HOST_Init();
   /* USER CODE BEGIN 2 */
   DWT_Init();
 
   systemSetup();
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);          //to open 5 v from PA9
 
-
+  ///////////////////////////////// FLASH ///////////////////////////////////////////////
+  // On startup, find the last valid index in the flash memory
+     FindLastBilResultIndex();
+   // Example: Saving a BIL result
+   //BilResult = 12.34f;  // New BIL result from external calculation
+  //SaveBilResultToFlash();
+  ////////////////////////////////////////////////////////////////////////////////////
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -129,9 +173,10 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+    MX_USB_HOST_Process();
 
     /* USER CODE BEGIN 3 */
-	  systemLoop();
+	 systemLoop();
 
   }
   /* USER CODE END 3 */
@@ -512,6 +557,39 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
+  * @brief USART3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART3_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART3_Init 0 */
+
+  /* USER CODE END USART3_Init 0 */
+
+  /* USER CODE BEGIN USART3_Init 1 */
+
+  /* USER CODE END USART3_Init 1 */
+  huart3.Instance = USART3;
+  huart3.Init.BaudRate = 115200;
+  huart3.Init.WordLength = UART_WORDLENGTH_8B;
+  huart3.Init.StopBits = UART_STOPBITS_1;
+  huart3.Init.Parity = UART_PARITY_NONE;
+  huart3.Init.Mode = UART_MODE_TX_RX;
+  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART3_Init 2 */
+
+  /* USER CODE END USART3_Init 2 */
+
+}
+
+/**
   * Enable DMA controller clock
   */
 static void MX_DMA_Init(void)
@@ -519,8 +597,15 @@ static void MX_DMA_Init(void)
 
   /* DMA controller clock enable */
   __HAL_RCC_DMA2_CLK_ENABLE();
+  __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
+  /* DMA1_Stream3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
+  /* DMA1_Stream6_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
   /* DMA2_Stream0_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
@@ -553,6 +638,9 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SPEC_LED_GPIO_Port, SPEC_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
@@ -563,6 +651,13 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, SPEC_START_Pin|SPEC_GAIN_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PC0 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SPEC_EOS_Pin */
   GPIO_InitStruct.Pin = SPEC_EOS_Pin;
@@ -635,7 +730,29 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Callback function to process HID keyboard input
+/*void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
+{
+    HID_KEYBD_Info_TypeDef *k_pinfo;
+    k_pinfo = USBH_HID_GetKeybdInfo(phost);  // Get keyboard information
 
+    if (k_pinfo != NULL) {
+        char c = USBH_HID_GetASCIICode(k_pinfo);  // Convert key to ASCII character
+        if (c != 0) {
+            // Add character to barcode data buffer
+            barcodeData[barcodeIndex++] = c;
+
+            // Check if Enter key (new line or carriage return) is pressed
+            if (c == '\n' || c == '\r') {
+                barcodeData[barcodeIndex] = '\0';  // Null-terminate the barcode string
+                //printf("Scanned Barcode: %s\n", barcodeData);  // Send the result to UART or display
+                barcodeIndex = 0;  // Reset index for the next scan
+            }
+        }
+    }
+}*/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* USER CODE END 4 */
 
 /**

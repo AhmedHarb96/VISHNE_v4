@@ -1,6 +1,7 @@
 ../USER/SRC/Spectrometer.c:14:6:spectrometer	4
 ../USER/SRC/Spectrometer.c:29:6:generate_spectrometer_signals	1
-../USER/SRC/Spectrometer.c:56:6:EXTI4_IRQHandler	1
-../USER/SRC/Spectrometer.c:70:6:DWT_Init	1
-../USER/SRC/Spectrometer.c:79:10:DWT_GetSysClockFreq	1
-../USER/SRC/Spectrometer.c:84:6:DWT_Delay	2
+../USER/SRC/Spectrometer.c:54:6:Send_UART_BLE	2
+../USER/SRC/Spectrometer.c:72:6:EXTI4_IRQHandler	1
+../USER/SRC/Spectrometer.c:85:6:DWT_Init	1
+../USER/SRC/Spectrometer.c:94:10:DWT_GetSysClockFreq	1
+../USER/SRC/Spectrometer.c:99:6:DWT_Delay	2

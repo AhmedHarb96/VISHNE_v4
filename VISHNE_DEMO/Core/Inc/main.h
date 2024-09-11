@@ -67,7 +67,7 @@ void Error_Handler(void);
 #define SPEC_EOS_GPIO_Port GPIOA
 #define StartTest_BTN_Pin GPIO_PIN_5
 #define StartTest_BTN_GPIO_Port GPIOA
-#define SPEC_LED_Pin GPIO_PIN_6
+#define SPEC_LED_Pin GPIO_PIN_7
 #define SPEC_LED_GPIO_Port GPIOA
 #define NAVIGATE_BTN_Pin GPIO_PIN_1
 #define NAVIGATE_BTN_GPIO_Port GPIOB

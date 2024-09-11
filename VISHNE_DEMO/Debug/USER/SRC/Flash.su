@@ -1,0 +1,6 @@
+../USER/SRC/Flash.c:20:6:FindLastBilResultIndex	24	static
+../USER/SRC/Flash.c:40:6:SaveBilResultToFlash	40	static
+../USER/SRC/Flash.c:66:6:ReadBilResultsFromFlash	32	static
+../USER/SRC/Flash.c:80:6:EraseFlashSector	40	static
+../USER/SRC/Flash.c:98:10:GetSectorAddress	16	static
+../USER/SRC/Flash.c:119:6:EraseAllBilFlashSectors	40	static
