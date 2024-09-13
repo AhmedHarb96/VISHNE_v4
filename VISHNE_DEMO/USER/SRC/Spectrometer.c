@@ -16,7 +16,8 @@ void spectrometer(void){
 	{
 		if(StartTestMenuFlag==1){
 			generate_spectrometer_signals();
-			Send_UART_BLE();
+			//Send_SPEC_UART();                                            // Send SPEC to UART           //***//
+			//Send_TO_BLE();												 // Send Patient Data to ESP_BLE
 
 		}else if (StartTestMenuFlag==2) {                               // if current menu != StartTest
 			 HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin, GPIO_PIN_SET);   // ***** ERROR Buzzer ***//
@@ -51,7 +52,7 @@ void generate_spectrometer_signals(void){
 }
 
 
-void Send_UART_BLE(void){
+void Send_SPEC_UART(void){
 	// Format the concentration values as a string
 	char message[12];            					//Spectrum to be sent to UART
 	for (int j = 0; j < NUM_WAVELENGTHS*2; j++){
@@ -62,9 +63,10 @@ void Send_UART_BLE(void){
 	  //len = sizeof(spectral_data[j]);
 	  //HAL_UART_Transmit(&huart3, (uint8_t *)message, sizeof(spectral_data[j]), HAL_MAX_DELAY);    //to ESP
 	}
-	char Bil_message[12];
+	/*char Bil_message[12];
 	snprintf(Bil_message, sizeof(Bil_message), "%.2f\n",BilResult);
 	HAL_UART_Transmit(&huart3, (uint8_t *)Bil_message, sizeof(Bil_message), HAL_MAX_DELAY);    //BilResult to ESP
+	*/
 }
 
 /////////////////////////////////////// EOS Interrupt ///////////////////////////////////////////

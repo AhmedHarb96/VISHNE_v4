@@ -43,6 +43,8 @@
 "./USB_HOST/App/usb_host.o"
 "./USB_HOST/Target/usbh_conf.o"
 "./USB_HOST/Target/usbh_platform.o"
+"./USER/SRC/BLE.o"
+"./USER/SRC/Barcode.o"
 "./USER/SRC/Calculation.o"
 "./USER/SRC/Flash.o"
 "./USER/SRC/LCD.o"

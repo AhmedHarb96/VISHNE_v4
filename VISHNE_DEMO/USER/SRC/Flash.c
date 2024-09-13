@@ -8,10 +8,13 @@
 typedef struct {
     uint32_t magic;
     float bilValue;
+    char patientID[8];  // Patient ID (8 characters)
 } FlashEntry;
 
 // Extern BilResult from another .c file
 extern float BilResult;
+
+extern char ID[8];
 
 // Internal variables
 static uint32_t flash_index = 0;  // Index for the circular buffer
@@ -25,12 +28,10 @@ void FindLastBilResultIndex(void) {
         FlashEntry* entry = (FlashEntry*)sectorBaseAddress;
 
         if (entry->magic != MAGIC_NUMBER) {
-            break;
+            break;                                //IDLE flash index
         }
-
         flash_index++;
     }
-
     if (flash_index >= MAX_BIL_READINGS) {
     	flash_index = 0;  // Circular buffer wrap-around
     }
@@ -46,6 +47,8 @@ void SaveBilResultToFlash(void) {
     FlashEntry entry;
     entry.magic = MAGIC_NUMBER;
     entry.bilValue = BilResult;
+    // Copy the patient ID and BilResult into the FlashEntry structure
+    strncpy(entry.patientID, ID, sizeof(entry.patientID));  // Copy the ID
 
     uint32_t sectorBaseAddress = GetSectorAddress(sector);
 
@@ -53,8 +56,12 @@ void SaveBilResultToFlash(void) {
     HAL_FLASH_Unlock();
 
     // Write the magic number and float value as 32-bit words
-    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress, entry.magic);
-    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress + 4, *(uint32_t*)&entry.bilValue);
+    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress, entry.magic);          // magic number ==> First idx(4 size)
+    // Write the patient ID (two 32-bit words for 8 characters)						    // ID ==> Second and Third idx(4 + 4 size)
+	for (int i = 0; i < sizeof(entry.patientID); i += 4) {								// bilValue ==> Fourth idx(4 size)
+		HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress + 4 + i, *(uint32_t*)&entry.patientID[i]);
+	}
+    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress + 12, *(uint32_t*)&entry.bilValue);
 
     HAL_FLASH_Lock();
 
@@ -71,8 +78,8 @@ void ReadBilResultsFromFlash(float* readings) {
         if (entry->magic != MAGIC_NUMBER) {
             break;
         }
-
         readings[i] = entry->bilValue;
+        //readings[i] = *entry;
     }
 }
 
@@ -90,7 +97,6 @@ void EraseFlashSector(uint32_t sector) {
     if (HAL_FLASHEx_Erase(&eraseInitStruct, &SectorError) != HAL_OK) {
         // Handle error
     }
-
     HAL_FLASH_Lock();
 }
 
@@ -100,7 +106,7 @@ uint32_t GetSectorAddress(uint32_t sector) {
 		//case FLASH_SECTOR_1: return 0x08004001;  // Sector 1 (16 KB)
 		//case FLASH_SECTOR_2: return 0x08008001;  // Sector 2 (16 KB)
 		//case FLASH_SECTOR_3: return 0x0800C000;  // Sector 3 (16 KB)
-		//case FLASH_SECTOR_4: return 0x08010000;  // Sector 4 (64 KB)
+		//case FLASH_SECTOR_4: return 0x0801FFFF;  // Sector 4 (64 KB)
 	    case FLASH_SECTOR_5: return 0x08020000;  // Sector 5 (128 KB)
 		case FLASH_SECTOR_6: return 0x08040000;  // Sector 6 (128 KB)
 		case FLASH_SECTOR_7: return 0x08060000;  // Sector 6 (128 KB)
@@ -109,7 +115,8 @@ uint32_t GetSectorAddress(uint32_t sector) {
 		case FLASH_SECTOR_10: return 0x080C0000;  // Sector 6 (128 KB)
 		case FLASH_SECTOR_11: return 0x080E0000;  // Sector 6 (128 KB)
 		// Add more sectors based on your memory layout
-		//default: return 0xFFFFFFFF;  // Invalid sector
+		//default: return 0x08000000;  // Invalid sector (default fallback)
+		////default: return 0xFFFFFFFF;  // Invalid sector
     }
 }
 
@@ -133,9 +140,7 @@ void EraseAllBilFlashSectors(void) {
             // Handle erase error (for example, log it or blink an error LED)
         }
     }
-
     HAL_FLASH_Lock();  // Lock the flash after erase operation
-
     // Reset the writing index
     flash_index = 0;
 }

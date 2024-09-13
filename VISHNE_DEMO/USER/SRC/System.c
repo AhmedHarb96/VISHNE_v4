@@ -26,11 +26,11 @@ void systemLoop(void)
 
 void systemSetup(void)
 {
-	  //EraseAllBilFlashSectors();            // to reset flash
-
 	  SpectrometerSetup();
 	  LCD_Setup();
 	  RTC_Init();
+	  USB_Setup();
+	  FLASH_Setup();
 }
 
 //################################################################################################//
@@ -59,6 +59,21 @@ void LCD_Setup(void)
 	  Aymed_Logo();
 	  Aymed_Text();
 }
+
+void USB_Setup(void){
+
+	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);          //to open 5 v from PA9
+
+}
+
+void FLASH_Setup(void){
+
+	  //EraseAllBilFlashSectors();            // to reset flash
+	  // On startup, find the last valid index in the flash memory
+	  FindLastBilResultIndex();
+
+}
+//################################################################################################//
 
 void Aymed_Logo(void)
 {

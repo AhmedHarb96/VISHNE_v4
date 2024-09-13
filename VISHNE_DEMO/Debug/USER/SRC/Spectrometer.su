@@ -1,7 +1,7 @@
 ../USER/SRC/Spectrometer.c:14:6:spectrometer	8	static
-../USER/SRC/Spectrometer.c:29:6:generate_spectrometer_signals	8	static
-../USER/SRC/Spectrometer.c:54:6:Send_UART_BLE	48	static
-../USER/SRC/Spectrometer.c:72:6:EXTI4_IRQHandler	8	static
-../USER/SRC/Spectrometer.c:85:6:DWT_Init	4	static
-../USER/SRC/Spectrometer.c:94:10:DWT_GetSysClockFreq	4	static
-../USER/SRC/Spectrometer.c:99:6:DWT_Delay	24	static
+../USER/SRC/Spectrometer.c:30:6:generate_spectrometer_signals	8	static
+../USER/SRC/Spectrometer.c:55:6:Send_SPEC_UART	24	static
+../USER/SRC/Spectrometer.c:74:6:EXTI4_IRQHandler	8	static
+../USER/SRC/Spectrometer.c:87:6:DWT_Init	4	static
+../USER/SRC/Spectrometer.c:96:10:DWT_GetSysClockFreq	4	static
+../USER/SRC/Spectrometer.c:101:6:DWT_Delay	24	static

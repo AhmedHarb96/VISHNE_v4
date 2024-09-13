@@ -12,7 +12,7 @@
 #include "LCD.h"
 #include "RTC.h"
 #include "Flash.h"
-
+#include "Barcode.h"
 
 extern ADC_HandleTypeDef hadc3;
 extern DMA_HandleTypeDef hdma_adc3;

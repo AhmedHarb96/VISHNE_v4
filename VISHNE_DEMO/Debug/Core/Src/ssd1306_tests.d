@@ -42,8 +42,22 @@ Core/Src/ssd1306_tests.o: ../Core/Src/ssd1306_tests.c \
  ../Core/Inc/../../USER/INC/Calculation.h \
  ../Core/Inc/../../USER/INC/Spectrometer.h \
  ../Core/Inc/../../USER/INC/LCD.h ../Core/Inc/../../USER/INC/RTC.h \
- ../Core/Inc/../../USER/INC/Flash.h ../Core/Inc/ssd1306_tests.h \
- ../Core/Inc/ssd1306_fonts.h ../Core/Inc/ssd1306.h
+ ../Core/Inc/../../USER/INC/Flash.h ../Core/Inc/../../USER/INC/Barcode.h \
+ ../USB_HOST/App/usb_host.h \
+ ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h \
+ ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h \
+ ../USB_HOST/Target/usbh_conf.h \
+ ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_def.h \
+ ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ioreq.h \
+ ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h \
+ ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_pipes.h \
+ ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ctlreq.h \
+ ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_mouse.h \
+ ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h \
+ ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h \
+ ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h \
+ ../Core/Inc/ssd1306_tests.h ../Core/Inc/ssd1306_fonts.h \
+ ../Core/Inc/ssd1306.h
 ../Core/Inc/ssd1306.h:
 ../Core/Inc/ssd1306_conf.h:
 ../Core/Inc/../../USER/INC/generalHeaders.h:
@@ -91,6 +105,20 @@ Core/Src/ssd1306_tests.o: ../Core/Src/ssd1306_tests.c \
 ../Core/Inc/../../USER/INC/LCD.h:
 ../Core/Inc/../../USER/INC/RTC.h:
 ../Core/Inc/../../USER/INC/Flash.h:
+../Core/Inc/../../USER/INC/Barcode.h:
+../USB_HOST/App/usb_host.h:
+../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h:
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h:
+../USB_HOST/Target/usbh_conf.h:
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_def.h:
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ioreq.h:
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h:
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_pipes.h:
+../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ctlreq.h:
+../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_mouse.h:
+../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h:
+../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h:
+../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h:
 ../Core/Inc/ssd1306_tests.h:
 ../Core/Inc/ssd1306_fonts.h:
 ../Core/Inc/ssd1306.h:

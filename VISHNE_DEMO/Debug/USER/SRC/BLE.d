@@ -1,5 +1,4 @@
-Core/Src/ssd1306.o: ../Core/Src/ssd1306.c ../Core/Inc/ssd1306.h \
- ../Core/Inc/ssd1306_conf.h ../Core/Inc/../../USER/INC/generalHeaders.h \
+USER/SRC/BLE.o: ../USER/SRC/BLE.c ../USER/SRC/../INC/generalHeaders.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -36,12 +35,10 @@ Core/Src/ssd1306.o: ../Core/Src/ssd1306.c ../Core/Inc/ssd1306.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
- ../Core/Inc/../../USER/INC/System.h \
- ../Core/Inc/../../USER/INC/generalHeaders.h \
- ../Core/Inc/../../USER/INC/Calculation.h \
- ../Core/Inc/../../USER/INC/Spectrometer.h \
- ../Core/Inc/../../USER/INC/LCD.h ../Core/Inc/../../USER/INC/RTC.h \
- ../Core/Inc/../../USER/INC/Flash.h ../Core/Inc/../../USER/INC/Barcode.h \
+ ../USER/SRC/../INC/System.h ../USER/SRC/../INC/generalHeaders.h \
+ ../USER/SRC/../INC/Calculation.h ../USER/SRC/../INC/Spectrometer.h \
+ ../USER/SRC/../INC/LCD.h ../USER/SRC/../INC/RTC.h \
+ ../USER/SRC/../INC/Flash.h ../USER/SRC/../INC/Barcode.h \
  ../USB_HOST/App/usb_host.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h \
@@ -55,9 +52,7 @@ Core/Src/ssd1306.o: ../Core/Src/ssd1306.c ../Core/Inc/ssd1306.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h
-../Core/Inc/ssd1306.h:
-../Core/Inc/ssd1306_conf.h:
-../Core/Inc/../../USER/INC/generalHeaders.h:
+../USER/SRC/../INC/generalHeaders.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -95,14 +90,14 @@ Core/Src/ssd1306.o: ../Core/Src/ssd1306.c ../Core/Inc/ssd1306.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
-../Core/Inc/../../USER/INC/System.h:
-../Core/Inc/../../USER/INC/generalHeaders.h:
-../Core/Inc/../../USER/INC/Calculation.h:
-../Core/Inc/../../USER/INC/Spectrometer.h:
-../Core/Inc/../../USER/INC/LCD.h:
-../Core/Inc/../../USER/INC/RTC.h:
-../Core/Inc/../../USER/INC/Flash.h:
-../Core/Inc/../../USER/INC/Barcode.h:
+../USER/SRC/../INC/System.h:
+../USER/SRC/../INC/generalHeaders.h:
+../USER/SRC/../INC/Calculation.h:
+../USER/SRC/../INC/Spectrometer.h:
+../USER/SRC/../INC/LCD.h:
+../USER/SRC/../INC/RTC.h:
+../USER/SRC/../INC/Flash.h:
+../USER/SRC/../INC/Barcode.h:
 ../USB_HOST/App/usb_host.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h:

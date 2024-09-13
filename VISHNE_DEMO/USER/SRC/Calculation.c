@@ -120,6 +120,7 @@ void capture_and_send_data(void)
 	 else{
 	 testDone = 1;
 	 }
+
 	 //if(currentTest<=avgValue) testDone = 1;
 
     // Format the concentration values as a string
