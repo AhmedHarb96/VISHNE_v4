@@ -7,9 +7,10 @@
 
 #ifndef INC_FLASH_H_
 #define INC_FLASH_H_
+#include "generalHeaders.h"
 
 void SaveBilResultToFlash(void);
-void ReadBilResultsFromFlash(float* readings);
+//void ReadBilResultsFromFlash(FlashEntry* readings);
 //void EraseFlashSector(void);
 void EraseFlashSector(uint32_t sector);
 void FindLastBilResultIndex(void);

@@ -7,34 +7,50 @@
 
 typedef struct {
     uint32_t magic;
+    uint32_t sequence;    // Sequence number to track the order of entries
     float bilValue;
     char patientID[8];  // Patient ID (8 characters)
+    uint8_t hours;       // RTC hours
+	uint8_t minutes;     // RTC minutes
+	uint8_t date;        // RTC date
+	uint8_t month;       // RTC month
+	uint8_t year;        // RTC year
 } FlashEntry;
 
-// Extern BilResult from another .c file
-extern float BilResult;
 
-extern char ID[8];
+// Extern BilResult from another .c file
+//extern float BilResult;
+//extern char ID[8];
+//extern uint8_t hours, minutes, seconds, day, date, month, year;
 
 // Internal variables
 static uint32_t flash_index = 0;  // Index for the circular buffer
+static uint32_t sequenceNumber = 0;  // Global sequence number for entries
 
 // Function to find the last valid BIL reading index across multiple sectors
 void FindLastBilResultIndex(void) {
-	flash_index = 0;
+    uint32_t maxSequence = 0;
+    flash_index = 0;
 
     for (int i = 0; i < MAX_BIL_READINGS; i++) {
         uint32_t sectorBaseAddress = GetSectorAddress(i + FLASH_START_SECTOR);
         FlashEntry* entry = (FlashEntry*)sectorBaseAddress;
 
-        if (entry->magic != MAGIC_NUMBER) {
-            break;                                //IDLE flash index
+        if (entry->magic == MAGIC_NUMBER) {
+            if (entry->sequence > maxSequence) {
+                maxSequence = entry->sequence;
+                flash_index = i + 1;
+            }
         }
-        flash_index++;
     }
+
+    // Wrap around if the index exceeds the max entries
     if (flash_index >= MAX_BIL_READINGS) {
-    	flash_index = 0;  // Circular buffer wrap-around
+        flash_index = 0;
     }
+
+    // Set the global sequenceNumber to maxSequence + 1
+    sequenceNumber = maxSequence + 1;
 }
 
 // Function to save BIL result to flash at the next sector
@@ -44,42 +60,56 @@ void SaveBilResultToFlash(void) {
     // Erase the current sector before writing
     EraseFlashSector(sector);
 
+    RTC_GetTime(&hours, &minutes, &seconds, &day, &date, &month, &year);   //**//
     FlashEntry entry;
     entry.magic = MAGIC_NUMBER;
+    entry.sequence = sequenceNumber++;
     entry.bilValue = BilResult;
-    // Copy the patient ID and BilResult into the FlashEntry structure
-    strncpy(entry.patientID, ID, sizeof(entry.patientID));  // Copy the ID
+    strncpy(entry.patientID, ID, sizeof(entry.patientID));
+    // Copy RTC values
+	entry.hours = hours;
+	entry.minutes = minutes;
+	entry.date = date;
+	entry.month = month;
+	entry.year = year;
 
     uint32_t sectorBaseAddress = GetSectorAddress(sector);
 
-    // Write the new BIL result to the current sector
     HAL_FLASH_Unlock();
 
-    // Write the magic number and float value as 32-bit words
-    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress, entry.magic);          // magic number ==> First idx(4 size)
-    // Write the patient ID (two 32-bit words for 8 characters)						    // ID ==> Second and Third idx(4 + 4 size)
-	for (int i = 0; i < sizeof(entry.patientID); i += 4) {								// bilValue ==> Fourth idx(4 size)
-		HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress + 4 + i, *(uint32_t*)&entry.patientID[i]);
-	}
-    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress + 12, *(uint32_t*)&entry.bilValue);
+    // Write the magic number, sequence number, patient ID, and BIL value
+    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress, entry.magic);
+    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress + 4, entry.sequence);
+
+    for (int i = 0; i < sizeof(entry.patientID); i += 4) {
+        HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress + 8 + i, *(uint32_t*)&entry.patientID[i]);
+    }
+
+    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress + 16, *(uint32_t*)&entry.bilValue);
+
+    // Write RTC values (stored as bytes)
+    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress + 20,
+					 (entry.hours << 24) | (entry.minutes << 16) | (entry.date << 8) | entry.month);
+    HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, sectorBaseAddress + 24, entry.year);  // year
 
     HAL_FLASH_Lock();
 
     // Update index for the next write
     flash_index = (flash_index + 1) % MAX_BIL_READINGS;
+    for (int i = 0; i < 8; i++) ID[i] = 0;  // Reset ID or // memset(ID, 0, sizeof(ID));
 }
 
 // Function to read all BIL results from flash into a provided array
-void ReadBilResultsFromFlash(float* readings) {
+void ReadBilResultsFromFlash(FlashEntry* readings) {
     for (int i = 0; i < MAX_BIL_READINGS; i++) {
         uint32_t sectorBaseAddress = GetSectorAddress(i + FLASH_START_SECTOR);
         FlashEntry* entry = (FlashEntry*)sectorBaseAddress;
 
-        if (entry->magic != MAGIC_NUMBER) {
+        if (entry->magic != MAGIC_NUMBER) {                //EMPTY flash index
             break;
         }
-        readings[i] = entry->bilValue;
-        //readings[i] = *entry;
+        //readings[i] = entry->bilValue;
+        readings[i] = *entry;
     }
 }
 

@@ -11,11 +11,11 @@
 #include "stdio.h"
 #include "usbh_hid_keybd.h"
 
+#define BcodeIndecesNO 8            // 8 ID characters
 char key;
-char Buffered_ID[17] = {0};    //17 // 8 characters
+char Buffered_ID[(BcodeIndecesNO*2)+1] = {0};    //17 // 8 characters
 int ID_idx = 0;
-char Uart_Buf[2];
-char ID[8];
+char ID[8] = {0};
 
 void USBH_HID_EventCallback(USBH_HandleTypeDef *phost){
 	if(USBH_HID_GetDeviceType(phost) == HID_KEYBOARD){
@@ -29,12 +29,11 @@ void USBH_HID_EventCallback(USBH_HandleTypeDef *phost){
 }
 
 void process_id(void){
-
 		Buffered_ID[ID_idx++] = key;
 		//Buffered_ID[17] = '\0'; // Add null terminator manually	}
-		if(ID_idx>=17) ID_idx = 1;
+		if(ID_idx>=(BcodeIndecesNO*2)+1) ID_idx = 1;
 
-		for (int i=1,j=0; i < 16; i+=2,++j) {
+		for (int i=1,j=0; i < (BcodeIndecesNO*2); i+=2,++j) {
 			ID[j] = Buffered_ID[i];
 		}
 }

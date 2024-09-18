@@ -1,1 +1,2 @@
-../USER/SRC/BLE.c:10:6:Send_TO_BLE	32	static
+../USER/SRC/BLE.c:34:6:Send_TO_BLE	80	static
+../USER/SRC/BLE.c:77:6:ExtractIDandBIL	32	static

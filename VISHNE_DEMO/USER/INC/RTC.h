@@ -21,7 +21,7 @@ void RTC_GetTime(uint8_t* hours, uint8_t* minutes, uint8_t* seconds, uint8_t* da
 
 void RTC_DisplayTime(void);
 
-
+extern uint8_t hours, minutes, seconds, day, date, month, year;
 
 
 #endif /* INC_RTC_H_ */

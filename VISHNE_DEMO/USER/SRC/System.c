@@ -16,6 +16,7 @@ float adcReadings[FILTER_SIZE]; // Array to store ADC samples
 float lastPercentage;           // Initialize last percentage to an invalid value
 
 bool isCharging = false;
+//float readFlashedData[28];
 
 void systemLoop(void)
 {
@@ -31,6 +32,7 @@ void systemSetup(void)
 	  RTC_Init();
 	  USB_Setup();
 	  FLASH_Setup();
+	 // ReadBilResultsFromFlash(readFlashedData);
 }
 
 //################################################################################################//
@@ -56,8 +58,8 @@ void LCD_Setup(void)
 
 	  //ChargerDetect_Init();
 
-	  Aymed_Logo();
-	  Aymed_Text();
+	  //Aymed_Logo();
+	  //Aymed_Text();
 }
 
 void USB_Setup(void){
@@ -69,8 +71,8 @@ void USB_Setup(void){
 void FLASH_Setup(void){
 
 	  //EraseAllBilFlashSectors();            // to reset flash
-	  // On startup, find the last valid index in the flash memory
-	  FindLastBilResultIndex();
+
+	  FindLastBilResultIndex();// On startup, find the last valid index in the flash memory
 
 }
 //################################################################################################//

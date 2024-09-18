@@ -1,6 +1,6 @@
-../USER/SRC/Flash.c:23:6:FindLastBilResultIndex	4
-../USER/SRC/Flash.c:41:6:SaveBilResultToFlash	2
-../USER/SRC/Flash.c:73:6:ReadBilResultsFromFlash	3
-../USER/SRC/Flash.c:87:6:EraseFlashSector	1
-../USER/SRC/Flash.c:104:10:GetSectorAddress	8
-../USER/SRC/Flash.c:126:6:EraseAllBilFlashSectors	2
+../USER/SRC/Flash.c:31:6:FindLastBilResultIndex	5
+../USER/SRC/Flash.c:57:6:SaveBilResultToFlash	3
+../USER/SRC/Flash.c:103:6:ReadBilResultsFromFlash	3
+../USER/SRC/Flash.c:117:6:EraseFlashSector	1
+../USER/SRC/Flash.c:134:10:GetSectorAddress	8
+../USER/SRC/Flash.c:156:6:EraseAllBilFlashSectors	2

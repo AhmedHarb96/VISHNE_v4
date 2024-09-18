@@ -31,7 +31,7 @@ extern ADC_HandleTypeDef hadc1;
 extern UART_HandleTypeDef huart3;
 
 extern char message[10];            //Result to be sent to UART and LCD
-
+//extern struct FlashEntry magic;
 
 //#define BUTTON_PIN GPIO_PIN_5
 //#define LED_PIN GPIO_PIN_6

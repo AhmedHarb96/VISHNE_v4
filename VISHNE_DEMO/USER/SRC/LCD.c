@@ -11,11 +11,13 @@
 
 // Menu states
 typedef enum {
+	MENU_READ_ID,
     MENU_SET_AVG,
     MENU_START_TEST,
     MENU_SHOW_RESULT,
+	MENU_SEND_BLE,
 	MENU_EDIT_RTC,
-    MENU_TOTAL
+	MENU_TOTAL
 } MenuState;
 
 // Cursor positions within a menu
@@ -57,7 +59,7 @@ const uint8_t charging_symbol[] = {
 };
 
 // Variables to keep track of current state
-static MenuState currentMenu = MENU_SET_AVG;
+static MenuState currentMenu = MENU_READ_ID;            //MENU_SET_AVG;
 static CursorPosition currentCursor = CURSOR_ON_MENU;
 static int avgValue = 1;  // Initial average value
 static int currentTest = 1;
@@ -78,12 +80,14 @@ int set_line_Y = 44;   //30
 int StartTestMenuFlag = 0;
 int TimeSetDone=0;
 
-static uint8_t hours = 0, minutes = 0, seconds = 0, date = 1, day = 1, month = 1, year = 24;
+ uint8_t hours = 0, minutes = 0, seconds = 0, date = 1, day = 1, month = 1, year = 24; //static
 char buffer[20];
 
 uint16_t adcValue1=0;
 float percentage=0.0;
 float batteryVoltage=0;
+int dotCounter = 0;  // To cycle the dots
+int sendBLEFlag=0;
 
 // Define constants for the moving average filter
 //#define FILTER_SIZE 10   				 // Number of samples for the moving average
@@ -109,9 +113,44 @@ void LCD_DisplayMenu(void) {
     DisplayPercentage();
     RTC_DisplayTime();
     TimeSetDone=0;
-
+    //strncpy(entry.patientID, ID, sizeof(entry.patientID));  // Copy the ID
     switch (currentMenu)
     {
+      // New menu for scanning patient ID
+		case MENU_READ_ID:
+			//ssd1306_SetCursor(10, 0);
+			//ssd1306_WriteString("Scan ID", Font_7x10, White);
+			ssd1306_SetCursor(10, 20);
+			ssd1306_WriteString("Patient ID:", Font_7x10, White);
+			ssd1306_SetCursor(10, 35);
+			ssd1306_WriteString(ID, Font_11x18, White);  // Display scanned ID
+
+			if (strlen(ID) == 0) {
+				ssd1306_SetCursor(10, 45);
+				//ssd1306_WriteString("Waiting for ID", Font_7x10, White); // Display message if no ID scanned
+
+				// Generate moving dots based on the dotCounter
+				switch (dotCounter % 3) {
+					case 0:
+						ssd1306_WriteString("Wait for ID .", Font_7x10, White);  // One dot
+						break;
+					case 1:
+						ssd1306_WriteString("Wait for ID ..", Font_7x10, White);  // Two dots
+						break;
+					case 2:
+						ssd1306_WriteString("Wait for ID ...", Font_7x10, White);  // Three dots
+						break;
+				}
+
+				// Increment dotCounter to cycle through dots
+				dotCounter++;
+				//HAL_Delay(1000);
+				if (dotCounter >= 60) {  // Reset counter after 60 refresh cycles (arbitrary limit)
+					dotCounter = 0;
+				}
+			}
+			break;
+
         case MENU_SET_AVG:
         	//ssd1306_FillRectangle(126, 0, 128, 128, Black);
         	DisplayPercentage();
@@ -224,6 +263,32 @@ void LCD_DisplayMenu(void) {
         	}
 
 			break;
+
+        case MENU_SEND_BLE:
+            DisplayPercentage();
+            RTC_DisplayTime();
+            StartTestMenuFlag = 2;  // Not in StartMenu ==> Don't init Spectrometer
+
+            if (currentCursor == CURSOR_ON_MENU) {
+                ssd1306_FillRectangle(menu_line_X-5, menu_line_Y, 105, 40, White);
+                ssd1306_SetCursor(menu_line_X, menu_line_Y+5);
+                ssd1306_WriteString("Send to BT", Font_7x10, Black);
+            }
+
+            // Indicate that the user can press the NAVIGATE button to send data
+            ssd1306_SetCursor(set_line_X - 5, menu_line_Y + 30);
+            ssd1306_WriteString("Press OK", Font_7x10, White);
+
+            // After NAVIGATE is pressed, send data via BLE
+            if (sendBLEFlag) {
+            	ssd1306_FillRectangle(menu_line_X-5, menu_line_Y, 105, 40, Black);
+                ssd1306_SetCursor(menu_line_X - 5, menu_line_Y + 30);
+                ssd1306_WriteString("Sending...", Font_7x10, White);
+                Send_TO_BLE();  // Call the function that sends data over BLE
+                sendBLEFlag = 0;  // Reset the flag after sending
+            }
+
+            break;
     }
 
     ssd1306_UpdateScreen();
@@ -241,20 +306,26 @@ void LCD_HandleButtonPress(void) {
             LCD_Reset();
         }
         else {
-        	 if (currentMenu == MENU_SET_AVG)
+        	 if (currentMenu == MENU_SET_AVG || currentMenu == MENU_EDIT_RTC)
         	 {
 				// Move cursor within the menu
 				currentCursor = (currentCursor + 1) % CURSOR_TOTAL;
 				if(currentCursor>=2)  currentCursor = (currentCursor - 1) % CURSOR_TOTAL;
 				LCD_UpdateMenu();
         	 }
-        	 if (currentMenu == MENU_EDIT_RTC)
+        	 /*if (currentMenu == MENU_EDIT_RTC)
 			 {
 				// Move cursor within the menu
 				currentCursor = (currentCursor + 1) % CURSOR_TOTAL;
 				if(currentCursor>=2)  currentCursor = (currentCursor - 1) % CURSOR_TOTAL;
 				LCD_UpdateMenu();
+			 }*/
+        	 else if (currentMenu == MENU_SEND_BLE) {
+				 // When in MENU_SEND_BLE, pressing NAVIGATE triggers BLE data sending
+				 sendBLEFlag = 1;  // Set the flag to send data
+				 LCD_UpdateMenu();  // Update display to show sending status
 			 }
+
         }
     } else if (HAL_GPIO_ReadPin(GPIOE, NEXT_BTN_Pin) == GPIO_PIN_RESET) { // Next Button
     	RTC_DisplayTime();
