@@ -64,7 +64,7 @@ void SaveBilResultToFlash(void) {
     FlashEntry entry;
     entry.magic = MAGIC_NUMBER;
     entry.sequence = sequenceNumber++;
-    entry.bilValue = BilResult;
+    entry.bilValue = AveragedBil; //BilResult;
     strncpy(entry.patientID, ID, sizeof(entry.patientID));
     // Copy RTC values
 	entry.hours = hours;
@@ -139,11 +139,11 @@ uint32_t GetSectorAddress(uint32_t sector) {
 		//case FLASH_SECTOR_4: return 0x0801FFFF;  // Sector 4 (64 KB)
 	    case FLASH_SECTOR_5: return 0x08020000;  // Sector 5 (128 KB)
 		case FLASH_SECTOR_6: return 0x08040000;  // Sector 6 (128 KB)
-		case FLASH_SECTOR_7: return 0x08060000;  // Sector 6 (128 KB)
-		case FLASH_SECTOR_8: return 0x08080000;  // Sector 6 (128 KB)
-		case FLASH_SECTOR_9: return 0x080A0000;  // Sector 6 (128 KB)
-		case FLASH_SECTOR_10: return 0x080C0000;  // Sector 6 (128 KB)
-		case FLASH_SECTOR_11: return 0x080E0000;  // Sector 6 (128 KB)
+		case FLASH_SECTOR_7: return 0x08060000;  // Sector 7 (128 KB)
+		case FLASH_SECTOR_8: return 0x08080000;  // Sector 8 (128 KB)
+		case FLASH_SECTOR_9: return 0x080A0000;  // Sector 9 (128 KB)
+		case FLASH_SECTOR_10: return 0x080C0000;  // Sector 10 (128 KB)
+		case FLASH_SECTOR_11: return 0x080E0000;  // Sector 11 (128 KB)
 		// Add more sectors based on your memory layout
 		//default: return 0x08000000;  // Invalid sector (default fallback)
 		////default: return 0xFFFFFFFF;  // Invalid sector

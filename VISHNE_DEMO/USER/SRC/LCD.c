@@ -207,6 +207,11 @@ void LCD_DisplayMenu(void) {
             	//*********Bil_AVG and FlashWrite***********//
             	MeasureAverage(); //HAL_Delay(10);
             	SaveBilResultToFlash();
+            	//************RESET************************//
+            	    for (int i = 0; i <= 12-1; i++) BilArray[i]=0;
+            	    SumBil = 0;
+            	    //AveragedBil = 0;                 // Flashing done but Displaying on LCD -> can not reset
+            	    BilResult=0;
             	//***********************//
                 currentMenu = MENU_SHOW_RESULT;
                 LCD_DisplayMenu();
@@ -604,6 +609,7 @@ void DoesTestComplete(void) {
 	{
 		testDone=0;
 		BilArray[currentTest]=BilResult;
+		BilResult=0;
 
 		HAL_GPIO_WritePin(GPIOE, READY_LED_Pin, GPIO_PIN_RESET);
 		HAL_Delay(Tests_Intratime);     // Time between Tests

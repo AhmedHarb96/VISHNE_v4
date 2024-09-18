@@ -33,13 +33,13 @@ uint32_t extracted_YEAR[7]; // Array to store 7 ID numbers
 
 void Send_TO_BLE(void){			//data to ESP ==> huart3
 
-	ExtractIDandBIL();          //read and extract Bil and ID from flash
+	ExtractDATA();          //Extract and read Bil,ID, TIME and YEAR from flash
 
-	char Bil_msg[10];  // Buffer for BIL message
+	char Bil_msg[10];  		// Buffer for BIL message
 	for (int i = 0; i < 7; i++) {
 		snprintf(Bil_msg, sizeof(Bil_msg), "%.2f\n", extracted_Bil[i]);
 		HAL_UART_Transmit(&huart3, (uint8_t *)Bil_msg, strlen(Bil_msg), HAL_MAX_DELAY);
-		HAL_Delay(20);  // Small delay to allow the ESP32 to process the data
+		HAL_Delay(20);  	// Small delay to allow the ESP32 to process the data
 	}
 
 	char ID_msg[10];  // Buffer for ID message
@@ -50,7 +50,8 @@ void Send_TO_BLE(void){			//data to ESP ==> huart3
 	}
 	char TIME_msg[12];  // Buffer for TIME message
 	for (int m = 0; m < 7; m++) {
-		snprintf(TIME_msg, sizeof(TIME_msg), "%lu\n", extracted_TIME[m]);
+		//uint8_t month = extracted_TIME[m] & 0xFF;
+		snprintf(TIME_msg, sizeof(TIME_msg), "%lu\n", extracted_TIME[m]);   //month
 		HAL_UART_Transmit(&huart3, (uint8_t *)TIME_msg, strlen(TIME_msg), HAL_MAX_DELAY);
 		HAL_Delay(20);  // Small delay to allow the ESP32 to process the data
 	}
@@ -74,7 +75,7 @@ uint8_t month = extracted_TIME & 0xFF;           // Extract the least significan
  *******************************************************************************************************
  */
 
-void ExtractIDandBIL(void) {
+void ExtractDATA(void) {
 
 	ReadBilResultsFromFlash(readFlashedBil); // to read BIL _ float
 	ReadBilResultsFromFlash(readFlashedID);  // to read ID _ char
@@ -89,7 +90,7 @@ void ExtractIDandBIL(void) {
 			tempID = tempID * 10 + (readFlashedID[IDindices[i] + j] - '0'); // Convert char to int
 		}
 		if(tempID==3761633968) tempID = 0;                 // if user didn't scan ID prior the test -> ID=0;
-		extracted_ID[i] = tempID; // Store in the ID array
+		extracted_ID[i] = tempID; 						   // Store in the ID array
 	}
 
 	for (int i = 0; i < 7; i++) {

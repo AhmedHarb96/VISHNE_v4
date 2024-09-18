@@ -9,6 +9,6 @@
 #define INC_BLE_H_
 
 void Send_TO_BLE(void);
-void ExtractIDandBIL(void);
+void ExtractDATA(void);
 
 #endif /* INC_BLE_H_ */

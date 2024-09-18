@@ -39,7 +39,7 @@ float CalculateAverage(float *array, uint8_t size);
 void DisplayPercentage(void);
 const uint8_t* GetBatteryIcon(float percentage);
 
-
+extern float AveragedBil;
 
 
 static const uint8_t image_data_ss[1024] = {
