@@ -12,7 +12,10 @@
 #include "stdio.h"
 #include "usbh_hid_keybd.h"
 
+#define BcodeIndecesNO 8
 extern char ID[8];
+extern char Buffered_ID[(BcodeIndecesNO*2)+1];
+extern int ID_idx;
 
 void USBH_HID_EventCallback(USBH_HandleTypeDef *phost);
 void process_id(void);

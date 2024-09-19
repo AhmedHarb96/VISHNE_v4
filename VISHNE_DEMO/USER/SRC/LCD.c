@@ -11,6 +11,7 @@
 
 // Menu states
 typedef enum {
+	MENU_START_DEV,
 	MENU_READ_ID,
     MENU_SET_AVG,
     MENU_START_TEST,
@@ -59,7 +60,7 @@ const uint8_t charging_symbol[] = {
 };
 
 // Variables to keep track of current state
-static MenuState currentMenu = MENU_READ_ID;            //MENU_SET_AVG;
+static MenuState currentMenu = MENU_START_DEV;   //MENU_READ_ID;    //MENU_SET_AVG;
 static CursorPosition currentCursor = CURSOR_ON_MENU;
 static int avgValue = 1;  // Initial average value
 static int currentTest = 1;
@@ -75,7 +76,7 @@ int menu_line_X = 35;   //35
 int menu_line_Y = 22;   //22
 
 int set_line_X = 40;
-int set_line_Y = 44;   //30
+int set_line_Y = 38;//44;   //30
 
 int StartTestMenuFlag = 0;
 int TimeSetDone=0;
@@ -114,19 +115,40 @@ void LCD_DisplayMenu(void) {
     RTC_DisplayTime();
     TimeSetDone=0;
     //strncpy(entry.patientID, ID, sizeof(entry.patientID));  // Copy the ID
+    HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin, GPIO_PIN_RESET); 				// Turn off BT
+    HAL_GPIO_WritePin(GPIOD, BT_INIT_Pin, GPIO_PIN_RESET); 				    // Turn off BT
+
     switch (currentMenu)
     {
+    	case MENU_START_DEV:
+			ssd1306_SetCursor(0, 0);
+			ssd1306_DrawBitmap(0,0,image_data_logo_text,128,32, White );          //AYMED text
+			//---------------------------------------------------//
+			ssd1306_SetCursor(34, 38);  //48
+			ssd1306_WriteString("VISHNE v4", Font_7x10, White);					  //Device's Version
+			//---------------------------------------------------//
+			ssd1306_SetCursor(5, 55);  //48
+			ssd1306_WriteString("EnterID", Font_6x8, White);		         // Prev btn (left) -> with ID
+			ssd1306_SetCursor(90, 55);  //48
+			ssd1306_WriteString("SkipID", Font_6x8, White);					 // Next btn (right)-> without ID
+
+    		break;
       // New menu for scanning patient ID
 		case MENU_READ_ID:
+			HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin, GPIO_PIN_SET); 				// Turn on BT
+			ssd1306_SetCursor(5, 56);
+			ssd1306_WriteString("PREV", Font_6x8, White);		    // Prev btn (left)
+			ssd1306_SetCursor(102, 56);
+			ssd1306_WriteString("NEXT", Font_6x8, White);			// Next btn (right)
 			//ssd1306_SetCursor(10, 0);
 			//ssd1306_WriteString("Scan ID", Font_7x10, White);
-			ssd1306_SetCursor(10, 20);
+			ssd1306_SetCursor(10, 15);
 			ssd1306_WriteString("Patient ID:", Font_7x10, White);
 			ssd1306_SetCursor(10, 35);
-			ssd1306_WriteString(ID, Font_11x18, White);  // Display scanned ID
+			ssd1306_WriteString(ID, Font_11x18, White);  //Font_11x18 // Display scanned ID
 
 			if (strlen(ID) == 0) {
-				ssd1306_SetCursor(10, 45);
+				ssd1306_SetCursor(10, 35);
 				//ssd1306_WriteString("Waiting for ID", Font_7x10, White); // Display message if no ID scanned
 
 				// Generate moving dots based on the dotCounter
@@ -141,10 +163,8 @@ void LCD_DisplayMenu(void) {
 						ssd1306_WriteString("Wait for ID ...", Font_7x10, White);  // Three dots
 						break;
 				}
-
 				// Increment dotCounter to cycle through dots
-				dotCounter++;
-				//HAL_Delay(1000);
+				//dotCounter++;   // TIM10 used
 				if (dotCounter >= 60) {  // Reset counter after 60 refresh cycles (arbitrary limit)
 					dotCounter = 0;
 				}
@@ -152,6 +172,10 @@ void LCD_DisplayMenu(void) {
 			break;
 
         case MENU_SET_AVG:
+			ssd1306_SetCursor(5, 56);
+			ssd1306_WriteString("PREV", Font_6x8, White);		    // Prev btn (left)
+			ssd1306_SetCursor(102, 56);
+			ssd1306_WriteString("NEXT", Font_6x8, White);			// Next btn (right)
         	//ssd1306_FillRectangle(126, 0, 128, 128, Black);
         	DisplayPercentage();
         	RTC_DisplayTime();
@@ -185,6 +209,10 @@ void LCD_DisplayMenu(void) {
             break;
 
         case MENU_START_TEST:
+			ssd1306_SetCursor(5, 56);
+			ssd1306_WriteString("PREV", Font_6x8, White);		    // Prev btn (left)
+			ssd1306_SetCursor(102, 56);
+			ssd1306_WriteString("NEXT", Font_6x8, White);			// Next btn (right)
         	DisplayPercentage();
         	RTC_DisplayTime();
         	StartTestMenuFlag = 1;						//  in StartMenu
@@ -208,20 +236,27 @@ void LCD_DisplayMenu(void) {
             	MeasureAverage(); //HAL_Delay(10);
             	SaveBilResultToFlash();
             	//************RESET************************//
-            	    for (int i = 0; i <= 12-1; i++) BilArray[i]=0;
-            	    SumBil = 0;
-            	    //AveragedBil = 0;                 // Flashing done but Displaying on LCD -> can not reset
-            	    BilResult=0;
+				for (int i = 0; i <= 12-1; i++) BilArray[i]=0;
+				SumBil = 0;
+				//AveragedBil = 0;                 // Flashing done but Displaying on LCD -> can not reset
+				BilResult=0;
+				memset(ID, 0, sizeof(ID));         //Bcode reset
+				memset(Buffered_ID, 0, sizeof(ID));
+				ID_idx=0;
             	//***********************//
                 currentMenu = MENU_SHOW_RESULT;
                 LCD_DisplayMenu();
-            } else {
+            } else {                                   // Test not performed yet
                 // Turn on the indication LED (READY)
                 HAL_GPIO_WritePin(GPIOE, READY_LED_Pin, GPIO_PIN_SET); 			// IND LED
             }
             break;
 
         case MENU_SHOW_RESULT:
+			ssd1306_SetCursor(5, 56);
+			ssd1306_WriteString("PREV", Font_6x8, White);		    // Prev btn (left)
+			ssd1306_SetCursor(102, 56);
+			ssd1306_WriteString("NEXT", Font_6x8, White);			// Next btn (right)
         	DisplayPercentage();
         	RTC_DisplayTime();
         	StartTestMenuFlag = 2;						// Not in StartMenu ==> Don't init Spectrometer
@@ -239,6 +274,11 @@ void LCD_DisplayMenu(void) {
             break;
 
         case MENU_EDIT_RTC:
+			ssd1306_SetCursor(5, 56);
+			ssd1306_WriteString("PREV", Font_6x8, White);		    // Prev btn (left)
+			ssd1306_SetCursor(102, 56);
+			ssd1306_WriteString("NEXT", Font_6x8, White);			// Next btn (right)
+
         	DisplayPercentage();
         	RTC_DisplayTime();
         	StartTestMenuFlag = 2;						// Not in StartMenu ==> Don't init Spectrometer
@@ -270,18 +310,25 @@ void LCD_DisplayMenu(void) {
 			break;
 
         case MENU_SEND_BLE:
+        	HAL_GPIO_WritePin(GPIOD, BT_INIT_Pin, GPIO_PIN_SET); 				// Turn on BT
+        	AveragedBil=0;//to Erase the old test from LCD while applying new one
+
+			ssd1306_SetCursor(5, 56);
+			ssd1306_WriteString("PREV", Font_6x8, White);		    // Prev btn (left)
+			ssd1306_SetCursor(102, 56);
+			ssd1306_WriteString("NEXT", Font_6x8, White);			// Next btn (right)
             DisplayPercentage();
             RTC_DisplayTime();
             StartTestMenuFlag = 2;  // Not in StartMenu ==> Don't init Spectrometer
 
             if (currentCursor == CURSOR_ON_MENU) {
-                ssd1306_FillRectangle(menu_line_X-5, menu_line_Y, 105, 40, White);
-                ssd1306_SetCursor(menu_line_X, menu_line_Y+5);
+                ssd1306_FillRectangle(menu_line_X-10, menu_line_Y, 100, 40, White);
+                ssd1306_SetCursor(menu_line_X-5, menu_line_Y+5);
                 ssd1306_WriteString("Send to BT", Font_7x10, Black);
             }
 
             // Indicate that the user can press the NAVIGATE button to send data
-            ssd1306_SetCursor(set_line_X - 5, menu_line_Y + 30);
+            ssd1306_SetCursor(set_line_X - 5, menu_line_Y + 23);
             ssd1306_WriteString("Press OK", Font_7x10, White);
 
             // After NAVIGATE is pressed, send data via BLE
@@ -335,31 +382,40 @@ void LCD_HandleButtonPress(void) {
     } else if (HAL_GPIO_ReadPin(GPIOE, NEXT_BTN_Pin) == GPIO_PIN_RESET) { // Next Button
     	RTC_DisplayTime();
         HAL_Delay(Debounce_Delay); // Debounce delay
-        if (currentCursor == CURSOR_ON_MENU) {
-        	//HAL_Delay(50);
-            currentMenu = (currentMenu + 1) % MENU_TOTAL;
-            LCD_UpdateMenu();
-        } else if (currentCursor == CURSOR_ON_VALUE) {
-            if (currentMenu == MENU_SET_AVG) {
-                avgValue++;
-                if (avgValue > 9) avgValue = 9; // Max AVG value
-                LCD_UpdateMenu();
-            }
-        }
+
+
+		if (currentCursor == CURSOR_ON_MENU ) {
+			//HAL_Delay(50);
+			if (currentMenu == MENU_START_DEV) currentMenu = MENU_SET_AVG;
+			else currentMenu = (currentMenu + 1) % MENU_TOTAL;
+			LCD_UpdateMenu();
+
+		} else if (currentCursor == CURSOR_ON_VALUE) {
+			if (currentMenu == MENU_SET_AVG) {
+				avgValue++;
+				if (avgValue > 9) avgValue = 9; // Max AVG value
+				LCD_UpdateMenu();
+			}
+		}
+
+
     } else if (HAL_GPIO_ReadPin(GPIOE, PREV_BTN_Pin) == GPIO_PIN_RESET) { // Prev Button
     	RTC_DisplayTime();
         HAL_Delay(Debounce_Delay); // Debounce delay
-        if (currentMenu == MENU_SHOW_RESULT) {SumBil = 0;AveragedBil = 0;BilResult=0;testDone=0;}  //*//
-        if (currentCursor == CURSOR_ON_MENU) {
-            currentMenu = (currentMenu - 1 + MENU_TOTAL) % MENU_TOTAL;
-            LCD_UpdateMenu();
-        } else if (currentCursor == CURSOR_ON_VALUE) {
-            if (currentMenu == MENU_SET_AVG) {
-                avgValue--;
-                if (avgValue < 1) avgValue = 1; // Min AVG value
-                LCD_UpdateMenu();
-            }
-        }
+
+		if (currentMenu == MENU_SHOW_RESULT) {SumBil = 0;AveragedBil = 0;BilResult=0;testDone=0;}
+		if (currentCursor == CURSOR_ON_MENU ) {
+			if (currentMenu == MENU_START_DEV) currentMenu = MENU_READ_ID;
+			else currentMenu = (currentMenu - 1 + MENU_TOTAL) % MENU_TOTAL;
+			LCD_UpdateMenu();
+
+		} else if (currentCursor == CURSOR_ON_VALUE) {
+			if (currentMenu == MENU_SET_AVG) {
+				avgValue--;
+				if (avgValue < 1) avgValue = 1; // Min AVG value
+				LCD_UpdateMenu();
+			}
+		}
 
     } else {
         holdNavigateBtn = 0; // Reset hold counter if no button is pressed
@@ -566,6 +622,12 @@ void TIM1_TRG_COM_TIM11_IRQHandler(void) {
 	if (TIM11->SR & TIM_SR_UIF) { // Check interrupt flag
 		TIM11->SR &= ~TIM_SR_UIF; // Clear interrupt flag
 		BatteryPercentage();      //calculate batt percentage , Every 5 second
+	}
+}
+void TIM1_UP_TIM10_IRQHandler(void) {
+	if (TIM10->SR & TIM_SR_UIF) { // Check interrupt flag
+		TIM10->SR &= ~TIM_SR_UIF; // Clear interrupt flag
+		dotCounter++;
 	}
 }
 

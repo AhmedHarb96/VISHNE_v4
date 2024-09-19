@@ -83,6 +83,10 @@ void Error_Handler(void);
 #define PREV_BTN_GPIO_Port GPIOE
 #define IsCharging_EXTI_Pin GPIO_PIN_8
 #define IsCharging_EXTI_GPIO_Port GPIOD
+#define Bcode_INIT_Pin GPIO_PIN_11
+#define Bcode_INIT_GPIO_Port GPIOD
+#define BT_INIT_Pin GPIO_PIN_12
+#define BT_INIT_GPIO_Port GPIOD
 #define RTC_SDA_Pin GPIO_PIN_9
 #define RTC_SDA_GPIO_Port GPIOC
 #define RTC_SCL_Pin GPIO_PIN_8

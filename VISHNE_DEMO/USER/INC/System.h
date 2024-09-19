@@ -22,6 +22,7 @@ void Aymed_Logo(void);
 void Aymed_Text(void);
 void BatteryLevelFilterInit(void);
 void TIM11_Init(void);
+void TIM10_Init(void);
 void ChargerDetect_Init(void);
 void DisplayChargingSymbol(bool isCharging);
 

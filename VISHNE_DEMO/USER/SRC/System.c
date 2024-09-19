@@ -8,7 +8,7 @@
 #include "ssd1306.h"
 #include "ssd1306_fonts.h"
 
-int logo_time = 2500;    //2500
+int logo_time = 1500;    //2500
 int text_time = 2500;    //2000
 
 //#define FILTER_SIZE 10          // Number of samples for the moving average
@@ -54,12 +54,13 @@ void LCD_Setup(void)
 
 	  BatteryLevelFilterInit();
 	  TIM11_Init(); 			// Initialize the timer for interrupts ==> for batt level percentage calculation
+	  TIM10_Init();
 	  for (int var = 0; var < 5; ++var)  BatteryPercentage();
 
 	  //ChargerDetect_Init();
 
-	  //Aymed_Logo();
-	  //Aymed_Text();
+	  Aymed_Logo();
+	  //Aymed_Text();      //moved to LCD.c
 }
 
 void USB_Setup(void){
@@ -123,6 +124,21 @@ void TIM11_Init(void) {
     // Enable TIM2 interrupt
     TIM11->DIER |= TIM_DIER_UIE;
     NVIC_EnableIRQ(TIM1_TRG_COM_TIM11_IRQn);
+}
+// Timer Interrupt Initialization
+void TIM10_Init(void) {
+	HAL_TIM_IRQHandler(&htim10);
+    // Enable clock for TIM2
+    RCC->AHB2ENR |= RCC_APB2ENR_TIM10EN;
+
+    // Configure TIM2: 1 tick per millisecond (assuming 16 MHz clock with APB1 prescaler 4)
+    TIM10->PSC = 36000 - 1;      // Prescaler: 16 MHz / 16000 = 1 kHz (1 ms period)
+    TIM10->ARR = 2000 - 1;      //4000=2 sec // Auto-reload: 1 kHz / 30000 = 0.033 Hz (30 second period)  10000 = 5 sec
+    TIM10->CR1 |= TIM_CR1_CEN;   // Enable counter
+
+    // Enable TIM2 interrupt
+    TIM10->DIER |= TIM_DIER_UIE;
+    NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
 }
 
 // ################################################# INTERRUPTS ######################################## //

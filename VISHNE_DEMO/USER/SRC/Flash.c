@@ -96,7 +96,9 @@ void SaveBilResultToFlash(void) {
 
     // Update index for the next write
     flash_index = (flash_index + 1) % MAX_BIL_READINGS;
-    for (int i = 0; i < 8; i++) ID[i] = 0;  // Reset ID or // memset(ID, 0, sizeof(ID));
+    //for (int i = 0; i < 8; i++) ID[i] = 0;  // Reset ID or // memset(ID, 0, sizeof(ID));
+    memset(ID, 0, sizeof(ID));
+    memset(Buffered_ID, 0, sizeof(ID));
 }
 
 // Function to read all BIL results from flash into a provided array
