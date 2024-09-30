@@ -38,6 +38,7 @@ float CalculateBatteryPercentage(float batteryVoltage);
 float CalculateAverage(float *array, uint8_t size);
 void DisplayPercentage(void);
 const uint8_t* GetBatteryIcon(float percentage);
+void UserAction_Detected(void);
 
 extern float AveragedBil;
 

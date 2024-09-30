@@ -49,7 +49,7 @@ void capture_and_send_data(void)
         //HAL_Delay(1);
         DWT_Delay(9);
         // Store the adc_value in spectral_data
-        spectral_data[idx++] = adc_value;
+        spectral_data[idx++] = adc_value;     //- 200; due to Voltage Level difference in ADC on BATT power
         if (idx >= NUM_WAVELENGTHS*2) idx=0;
     }
     // Filter out baseline values

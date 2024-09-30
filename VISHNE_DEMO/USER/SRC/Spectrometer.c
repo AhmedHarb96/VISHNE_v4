@@ -12,12 +12,12 @@
 
 
 void spectrometer(void){
-	if ((HAL_GPIO_ReadPin(GPIOA, StartTest_BTN_Pin) == GPIO_PIN_RESET) )
-	{
+	if ((HAL_GPIO_ReadPin(GPIOA, StartTest_BTN_Pin) == GPIO_PIN_RESET) ){
+		UserAction_Detected();                    // Reset StandBy mode counter
 		if(StartTestMenuFlag==1){
 			generate_spectrometer_signals();
-			//Send_SPEC_UART();                                            // Send SPEC to UART           //***//
-			//Send_TO_BLE();												 // Send Patient Data to ESP_BLE
+			Send_SPEC_UART();                                            // Send SPEC to UART           //***//
+			//Send_TO_BLE();												 // Send Patient Data to ESP_BLE -> moved to LCD.c
 
 		}else if (StartTestMenuFlag==2) {                               // if current menu != StartTest
 			 HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin, GPIO_PIN_SET);   // ***** ERROR Buzzer ***//

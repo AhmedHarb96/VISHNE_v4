@@ -90,11 +90,13 @@ float batteryVoltage=0;
 int dotCounter = 0;  // To cycle the dots
 int sendBLEFlag=0;
 
+volatile uint32_t inactivityCounter = 0;  // Inactivity timer
+int TimeToStandBy = 120;   // StandBy within x sec
 // Define constants for the moving average filter
 //#define FILTER_SIZE 10   				 // Number of samples for the moving average
 //float adcReadings[FILTER_SIZE]; 		 // Array to store ADC samples
 
-#define UPDATE_THRESHOLD 5.0 			//5.0 //1.0 // Minimum percentage change to update display
+#define UPDATE_THRESHOLD 10.0 			//5.0 //1.0 // Minimum percentage change to update display
 
 uint8_t filterIndex = 0;       			 // Current index in the filter array
 float filteredVoltage = 0.0;    		 // Filtered voltage value
@@ -349,7 +351,8 @@ void LCD_DisplayMenu(void) {
 // Function to handle button presses
 void LCD_HandleButtonPress(void) {
     // Assume button GPIOs are connected and configured
-    if ((HAL_GPIO_ReadPin(GPIOB, NAVIGATE_BTN_Pin) == GPIO_PIN_RESET)) { // Navigate Button
+    if ((HAL_GPIO_ReadPin(GPIOA, NAVIGATE_BTN_Pin) == GPIO_PIN_RESET)) { // Navigate Button
+    	UserAction_Detected();
     	RTC_DisplayTime();
         holdNavigateBtn++;
         HAL_Delay(Debounce_Delay); // Debounce delay
@@ -377,9 +380,10 @@ void LCD_HandleButtonPress(void) {
 				 sendBLEFlag = 1;  // Set the flag to send data
 				 LCD_UpdateMenu();  // Update display to show sending status
 			 }
-
         }
+
     } else if (HAL_GPIO_ReadPin(GPIOE, NEXT_BTN_Pin) == GPIO_PIN_RESET) { // Next Button
+    	UserAction_Detected();
     	RTC_DisplayTime();
         HAL_Delay(Debounce_Delay); // Debounce delay
 
@@ -398,8 +402,8 @@ void LCD_HandleButtonPress(void) {
 			}
 		}
 
-
     } else if (HAL_GPIO_ReadPin(GPIOE, PREV_BTN_Pin) == GPIO_PIN_RESET) { // Prev Button
+    	UserAction_Detected();
     	RTC_DisplayTime();
         HAL_Delay(Debounce_Delay); // Debounce delay
 
@@ -491,7 +495,7 @@ void EditRTC() {
 				case 4: month = (month == 1) ? 12 : month - 1; break;
 				case 5: year = (year == 0) ? 99 : year - 1; break;
 			}
-		} else if (HAL_GPIO_ReadPin(GPIOB, NAVIGATE_BTN_Pin) == GPIO_PIN_RESET) {
+		} else if (HAL_GPIO_ReadPin(GPIOA, NAVIGATE_BTN_Pin) == GPIO_PIN_RESET) {
 			HAL_Delay(Debounce_Delay); // Debounce delay
 			editIndex = (editIndex + 1) % 6;
 			holdNavigateBtn++;
@@ -523,14 +527,14 @@ void EditRTC() {
 // Function to calculate battery percentage
 void BatteryPercentage(void) {                  //NOTE: With TMR: Calculate Percenatge Every 5 sec & Filter Window = 5 & UPDATE_THRESHOLD = 5
 
-	//HAL_ADC_Start(&hadc1);
-	//HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
-	//adcValue1 = HAL_ADC_GetValue(&hadc1);
+	/*HAL_ADC_Start(&hadc1);
+	HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+	adcValue1 = HAL_ADC_GetValue(&hadc1);*/
 
     HAL_ADC_Start_DMA(&hadc1, &adcValue1, 1);
 
 	batteryVoltage = (adcValue1 / 4575.0) * 3.3; //4095.0 // Convert ADC value to voltage
-	batteryVoltage *= 1.67;       						//1.68	//2	 //  = (R1 + R2) / R2 = 2
+	batteryVoltage *= 1.52;    //1.48;  //1.53 = 240927    						//1.67	//2	 //  = (R1 + R2) / R2 = 2
 
 	// Update the filter array with the new reading
 	adcReadings[filterIndex] = batteryVoltage;
@@ -548,12 +552,12 @@ void BatteryPercentage(void) {                  //NOTE: With TMR: Calculate Perc
 float CalculateBatteryPercentage(float batteryVoltage) {
     float percentage;
 
-    if (batteryVoltage >= 4.15) {
+    if (batteryVoltage >= 4.20) {  //4.15
         percentage = 99.0;
     } else if (batteryVoltage <= 3.6) {
         percentage = 0.0;
     } else {
-        percentage = (batteryVoltage - 3.6) / (4.15 - 3.6) * 100;
+        percentage = (batteryVoltage - 3.6) / (4.20 - 3.6) * 100;    //4.15
     }
 
     return percentage;
@@ -627,12 +631,16 @@ void TIM1_TRG_COM_TIM11_IRQHandler(void) {
 void TIM1_UP_TIM10_IRQHandler(void) {
 	if (TIM10->SR & TIM_SR_UIF) { // Check interrupt flag
 		TIM10->SR &= ~TIM_SR_UIF; // Clear interrupt flag
-		dotCounter++;
+		dotCounter++;             // dot every 1 sec
+
+		inactivityCounter++;      //StandBy Counter 1 sec
+		if (inactivityCounter >= TimeToStandBy){           // standBy after 120 sec
+			Enter_Standby_Mode();
+		}
 	}
 }
 
 //#######################################################################################################################
-
 
 // Function to handle menu updates
 void LCD_UpdateMenu(void) {
@@ -682,7 +690,11 @@ void DoesTestComplete(void) {
 	}
 }
 
-
+void UserAction_Detected(void)
+{
+    // Reset inactivity counter to 0 when user performs an action
+    inactivityCounter = 0;
+}
 
 
 

@@ -20,6 +20,7 @@ extern DMA_HandleTypeDef hdma_adc3;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim11;
 extern TIM_HandleTypeDef htim10;
+extern TIM_HandleTypeDef htim9;
 extern DMA_HandleTypeDef hdma_tim1_ch1;
 
 extern UART_HandleTypeDef huart2;

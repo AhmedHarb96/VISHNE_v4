@@ -57,6 +57,7 @@ SPI_HandleTypeDef hspi3;
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim10;
 TIM_HandleTypeDef htim11;
+TIM_HandleTypeDef htim13;
 DMA_HandleTypeDef hdma_tim1_ch1;
 
 UART_HandleTypeDef huart2;
@@ -81,6 +82,7 @@ static void MX_ADC1_Init(void);
 static void MX_TIM11_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_TIM10_Init(void);
+static void MX_TIM13_Init(void);
 void MX_USB_HOST_Process(void);
 
 /* USER CODE BEGIN PFP */
@@ -89,34 +91,7 @@ void MX_USB_HOST_Process(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-//char barcodeData[128];  // Buffer to hold the barcode data
-//int barcodeIndex = 0;   // Index to track barcode data
-/*
-char Uart_Buf[100];
-void USBH_HID_EventCallback(USBH_HandleTypeDef *phost){
 
-	if(USBH_HID_GetDeviceType(phost) == HID_MOUSE){
-		HID_MOUSE_Info_TypeDef *Mouse_Info;
-		Mouse_Info = USBH_HID_GetMouseInfo(phost);
-		int X_VAL = Mouse_Info->x;
-		int Y_VAL = Mouse_Info->y;
-		if(X_VAL > 127) X_VAL -= 255;
-		if(Y_VAL > 127) Y_VAL -= 255;
-
-		int len = sprintf(Uart_Buf, "X=%d, Y=%d, Button1=%d, Button2=%d, Button3=%d\n", X_VAL, Y_VAL, \
-				Mouse_Info->buttons[0], Mouse_Info->buttons[1], Mouse_Info->buttons[2]);
-		HAL_UART_Transmit(&huart2, (uint8_t *)Uart_Buf, len, 1000);
-	}
-	if(USBH_HID_GetDeviceType(phost) == HID_KEYBOARD){
-		HID_KEYBD_Info_TypeDef *Keyboard_Info;
-		Keyboard_Info = USBH_HID_GetKeybdInfo(phost);
-		char key = USBH_HID_GetASCIICode(Keyboard_Info);
-		int len = sprintf(Uart_Buf, "Key Pressed = %c \n", key);
-		HAL_UART_Transmit(&huart2, (uint8_t *)Uart_Buf, len, 1000);
-	}
-
-}
-*/
 /* USER CODE END 0 */
 
 /**
@@ -159,6 +134,7 @@ int main(void)
   MX_USART3_UART_Init();
   MX_USB_HOST_Init();
   MX_TIM10_Init();
+  MX_TIM13_Init();
   /* USER CODE BEGIN 2 */
   DWT_Init();
 
@@ -175,7 +151,6 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	 systemLoop();
-
   }
   /* USER CODE END 3 */
 }
@@ -264,7 +239,7 @@ static void MX_ADC1_Init(void)
 
   /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
   */
-  sConfig.Channel = ADC_CHANNEL_0;
+  sConfig.Channel = ADC_CHANNEL_8;
   sConfig.Rank = 1;
   sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
@@ -494,9 +469,9 @@ static void MX_TIM10_Init(void)
 
   /* USER CODE END TIM10_Init 1 */
   htim10.Instance = TIM10;
-  htim10.Init.Prescaler = 36000-1;
+  htim10.Init.Prescaler = 168000-1;//36000-1;
   htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = 30000-1;
+  htim10.Init.Period = 1000-1;//30000-1;
   htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
@@ -563,6 +538,51 @@ static void MX_TIM11_Init(void)
   /* USER CODE BEGIN TIM11_Init 2 */
 
   /* USER CODE END TIM11_Init 2 */
+
+}
+
+/**
+  * @brief TIM13 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM13_Init(void)
+{
+
+  /* USER CODE BEGIN TIM13_Init 0 */
+
+  /* USER CODE END TIM13_Init 0 */
+
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM13_Init 1 */
+
+  /* USER CODE END TIM13_Init 1 */
+  htim13.Instance = TIM13;
+  htim13.Init.Prescaler = 18000-1;
+  htim13.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim13.Init.Period = 30000-1;
+  htim13.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim13.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim13) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_OC_Init(&htim13) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_TIMING;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_OC_ConfigChannel(&htim13, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM13_Init 2 */
+
+  /* USER CODE END TIM13_Init 2 */
 
 }
 
@@ -703,11 +723,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : SPEC_EOS_Pin */
-  GPIO_InitStruct.Pin = SPEC_EOS_Pin;
+  /*Configure GPIO pins : NAVIGATE_BTN_Pin SPEC_EOS_Pin */
+  GPIO_InitStruct.Pin = NAVIGATE_BTN_Pin|SPEC_EOS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(SPEC_EOS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : StartTest_BTN_Pin */
   GPIO_InitStruct.Pin = StartTest_BTN_Pin;
@@ -721,12 +741,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(SPEC_LED_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : NAVIGATE_BTN_Pin */
-  GPIO_InitStruct.Pin = NAVIGATE_BTN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(NAVIGATE_BTN_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : ERR_BUZZER_Pin READY_LED_Pin */
   GPIO_InitStruct.Pin = ERR_BUZZER_Pin|READY_LED_Pin;
@@ -771,34 +785,15 @@ static void MX_GPIO_Init(void)
   HAL_NVIC_SetPriority(EXTI4_IRQn, 2, 0);
   HAL_NVIC_EnableIRQ(EXTI4_IRQn);
 
+  HAL_NVIC_SetPriority(EXTI0_IRQn, 2, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+
      // HAL_GPIO_WritePin(GPIOD, LCD_BL_Pin, GPIO_PIN_SET);
 /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Callback function to process HID keyboard input
-/*void USBH_HID_EventCallback(USBH_HandleTypeDef *phost)
-{
-    HID_KEYBD_Info_TypeDef *k_pinfo;
-    k_pinfo = USBH_HID_GetKeybdInfo(phost);  // Get keyboard information
 
-    if (k_pinfo != NULL) {
-        char c = USBH_HID_GetASCIICode(k_pinfo);  // Convert key to ASCII character
-        if (c != 0) {
-            // Add character to barcode data buffer
-            barcodeData[barcodeIndex++] = c;
-
-            // Check if Enter key (new line or carriage return) is pressed
-            if (c == '\n' || c == '\r') {
-                barcodeData[barcodeIndex] = '\0';  // Null-terminate the barcode string
-                //printf("Scanned Barcode: %s\n", barcodeData);  // Send the result to UART or display
-                barcodeIndex = 0;  // Reset index for the next scan
-            }
-        }
-    }
-}*/
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* USER CODE END 4 */
 
 /**

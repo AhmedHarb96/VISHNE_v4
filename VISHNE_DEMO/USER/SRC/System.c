@@ -14,9 +14,7 @@ int text_time = 2500;    //2000
 //#define FILTER_SIZE 10          // Number of samples for the moving average
 float adcReadings[FILTER_SIZE]; // Array to store ADC samples
 float lastPercentage;           // Initialize last percentage to an invalid value
-
 bool isCharging = false;
-//float readFlashedData[28];
 
 void systemLoop(void)
 {
@@ -33,6 +31,7 @@ void systemSetup(void)
 	  USB_Setup();
 	  FLASH_Setup();
 	 // ReadBilResultsFromFlash(readFlashedData);
+	  Wakeup_Init();      // Check if the system woke up from Standby
 }
 
 //################################################################################################//
@@ -109,16 +108,16 @@ void BatteryLevelFilterInit(void)
 		  adcReadings[i] = 0;
 	  }
 }
-
+// ################################################# TIMERS Configurations ######################################## //
 // Timer Interrupt Initialization
-void TIM11_Init(void) {
+void TIM11_Init(void) {                   // Battery calculation
 	HAL_TIM_IRQHandler(&htim11);
     // Enable clock for TIM2
     RCC->AHB2ENR |= RCC_APB2ENR_TIM11EN;
 
     // Configure TIM2: 1 tick per millisecond (assuming 16 MHz clock with APB1 prescaler 4)
-    TIM11->PSC = 36000 - 1;      // Prescaler: 16 MHz / 16000 = 1 kHz (1 ms period)
-    TIM11->ARR = 14000 - 1;      //4000=2 sec // Auto-reload: 1 kHz / 30000 = 0.033 Hz (30 second period)  10000 = 5 sec
+    TIM11->PSC = 168000-1;    //168*5->10 sec //36000 - 1;  // Prescaler: 16 MHz / 16000 = 1 kHz (1 ms period)
+    TIM11->ARR = 20000-1;    //14000 - 1;  //4000=2 sec //50000 = 5 sec
     TIM11->CR1 |= TIM_CR1_CEN;   // Enable counter
 
     // Enable TIM2 interrupt
@@ -126,22 +125,55 @@ void TIM11_Init(void) {
     NVIC_EnableIRQ(TIM1_TRG_COM_TIM11_IRQn);
 }
 // Timer Interrupt Initialization
-void TIM10_Init(void) {
+void TIM10_Init(void) {                     //dotCounter++; && Standby_Mode ctr
 	HAL_TIM_IRQHandler(&htim10);
     // Enable clock for TIM2
     RCC->AHB2ENR |= RCC_APB2ENR_TIM10EN;
 
     // Configure TIM2: 1 tick per millisecond (assuming 16 MHz clock with APB1 prescaler 4)
-    TIM10->PSC = 36000 - 1;      // Prescaler: 16 MHz / 16000 = 1 kHz (1 ms period)
-    TIM10->ARR = 2000 - 1;      //4000=2 sec // Auto-reload: 1 kHz / 30000 = 0.033 Hz (30 second period)  10000 = 5 sec
+    TIM10->PSC = 84000 - 1;      // Prescaler: 16 MHz / 16000 = 1 kHz (1 ms period)
+    TIM10->ARR = 10000 - 1;      //10000 = 1 sec
     TIM10->CR1 |= TIM_CR1_CEN;   // Enable counter
 
     // Enable TIM2 interrupt
     TIM10->DIER |= TIM_DIER_UIE;
     NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
 }
+// ################################################# Standby Mode ######################################## //
+void Enter_Standby_Mode(void){
+	HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOD, BT_INIT_Pin, GPIO_PIN_RESET);
+
+    // Enable wake-up sources (RTC or external pin)
+    HAL_PWR_EnableWakeUpPin(PWR_WAKEUP_PIN1);  // Wake-up from PA0 (WKUP pin)
+
+    // Clear the Wake-up flag
+    __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+
+    // Enter Standby Mode
+    HAL_PWR_EnterSTANDBYMode();
+}
+
+void Wakeup_Init(void){
+    // Check if the system was reset due to Standby mode wake-up
+    if (__HAL_PWR_GET_FLAG(PWR_FLAG_SB) != RESET){
+        // Clear the Standby flag
+        __HAL_PWR_CLEAR_FLAG(PWR_FLAG_SB);
+
+        // Clear Wake-up flags
+        __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+    }
+}
 
 // ################################################# INTERRUPTS ######################################## //
+/* EXTI1 IRQ Handler */
+void EXTI0_IRQHandler(void)                 // System Wake-UP
+{
+    // Handle external interrupt (button press on PB1)
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+    // Clear interrupt and wake up the MCU
+}
+
 /* EXTI4 IRQ Handler */
 
 void EXTI9_5_IRQHandler(void)

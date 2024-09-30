@@ -59,18 +59,16 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BATT_LEVEL_Pin GPIO_PIN_0
-#define BATT_LEVEL_GPIO_Port GPIOA
-#define SPEC_VIDEO_Pin GPIO_PIN_1
-#define SPEC_VIDEO_GPIO_Port GPIOA
+#define NAVIGATE_BTN_Pin GPIO_PIN_0
+#define NAVIGATE_BTN_GPIO_Port GPIOA
 #define SPEC_EOS_Pin GPIO_PIN_4
 #define SPEC_EOS_GPIO_Port GPIOA
 #define StartTest_BTN_Pin GPIO_PIN_5
 #define StartTest_BTN_GPIO_Port GPIOA
 #define SPEC_LED_Pin GPIO_PIN_7
 #define SPEC_LED_GPIO_Port GPIOA
-#define NAVIGATE_BTN_Pin GPIO_PIN_1
-#define NAVIGATE_BTN_GPIO_Port GPIOB
+#define BATT_LEVEL_Pin GPIO_PIN_0
+#define BATT_LEVEL_GPIO_Port GPIOB
 #define SPEC_CLK_Pin GPIO_PIN_9
 #define SPEC_CLK_GPIO_Port GPIOE
 #define ERR_BUZZER_Pin GPIO_PIN_12

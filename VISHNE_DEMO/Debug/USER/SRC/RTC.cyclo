@@ -1,6 +1,7 @@
 ../USER/SRC/RTC.c:17:9:decToBcd	1
 ../USER/SRC/RTC.c:21:5:bcdToDec	1
-../USER/SRC/RTC.c:26:6:RTC_Init	1
-../USER/SRC/RTC.c:33:6:RTC_SetTime	1
-../USER/SRC/RTC.c:48:6:RTC_GetTime	1
-../USER/SRC/RTC.c:64:6:RTC_DisplayTime	3
+../USER/SRC/RTC.c:26:9:DS1307_is_running	1
+../USER/SRC/RTC.c:36:6:RTC_Init	2
+../USER/SRC/RTC.c:47:6:RTC_SetTime	1
+../USER/SRC/RTC.c:62:6:RTC_GetTime	1
+../USER/SRC/RTC.c:78:6:RTC_DisplayTime	3

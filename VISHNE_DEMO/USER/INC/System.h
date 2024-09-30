@@ -23,9 +23,12 @@ void Aymed_Text(void);
 void BatteryLevelFilterInit(void);
 void TIM11_Init(void);
 void TIM10_Init(void);
+//void TIM9_Init(void);
 void ChargerDetect_Init(void);
 void DisplayChargingSymbol(bool isCharging);
 
+void Wakeup_Init(void);
+void Enter_Standby_Mode(void);
 
 extern float adcReadings[FILTER_SIZE]; // Array to store ADC samples
 extern float lastPercentage;
