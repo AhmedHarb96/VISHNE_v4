@@ -61,6 +61,8 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define NAVIGATE_BTN_Pin GPIO_PIN_0
 #define NAVIGATE_BTN_GPIO_Port GPIOA
+#define SPEC_VIDEO_Pin GPIO_PIN_1
+#define SPEC_VIDEO_GPIO_Port GPIOA
 #define SPEC_EOS_Pin GPIO_PIN_4
 #define SPEC_EOS_GPIO_Port GPIOA
 #define StartTest_BTN_Pin GPIO_PIN_5
@@ -85,6 +87,8 @@ void Error_Handler(void);
 #define Bcode_INIT_GPIO_Port GPIOD
 #define BT_INIT_Pin GPIO_PIN_12
 #define BT_INIT_GPIO_Port GPIOD
+#define EN_5vReg_Pin GPIO_PIN_13
+#define EN_5vReg_GPIO_Port GPIOD
 #define RTC_SDA_Pin GPIO_PIN_9
 #define RTC_SDA_GPIO_Port GPIOC
 #define RTC_SCL_Pin GPIO_PIN_8

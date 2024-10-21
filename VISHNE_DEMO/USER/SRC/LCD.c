@@ -117,7 +117,8 @@ void LCD_DisplayMenu(void) {
     RTC_DisplayTime();
     TimeSetDone=0;
     //strncpy(entry.patientID, ID, sizeof(entry.patientID));  // Copy the ID
-    HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin, GPIO_PIN_RESET); 				// Turn off BT
+    HAL_GPIO_WritePin(GPIOD, EN_5vReg_Pin, GPIO_PIN_RESET);                 // Turn off 5v REG
+    HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin, GPIO_PIN_RESET); 				// Turn off Barcode
     HAL_GPIO_WritePin(GPIOD, BT_INIT_Pin, GPIO_PIN_RESET); 				    // Turn off BT
 
     switch (currentMenu)
@@ -137,7 +138,9 @@ void LCD_DisplayMenu(void) {
     		break;
       // New menu for scanning patient ID
 		case MENU_READ_ID:
-			HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin, GPIO_PIN_SET); 				// Turn on BT
+			HAL_GPIO_WritePin(GPIOD, EN_5vReg_Pin, GPIO_PIN_SET);                   // Turn on 5v REG
+			//HAL_Delay(10);
+			HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin, GPIO_PIN_SET); 				// Turn on BarCode Reader
 			ssd1306_SetCursor(5, 56);
 			ssd1306_WriteString("PREV", Font_6x8, White);		    // Prev btn (left)
 			ssd1306_SetCursor(102, 56);
@@ -211,6 +214,7 @@ void LCD_DisplayMenu(void) {
             break;
 
         case MENU_START_TEST:
+        	HAL_GPIO_WritePin(GPIOD, EN_5vReg_Pin, GPIO_PIN_SET);                   // Turn on 5v REG
 			ssd1306_SetCursor(5, 56);
 			ssd1306_WriteString("PREV", Font_6x8, White);		    // Prev btn (left)
 			ssd1306_SetCursor(102, 56);
@@ -312,6 +316,7 @@ void LCD_DisplayMenu(void) {
 			break;
 
         case MENU_SEND_BLE:
+        	HAL_GPIO_WritePin(GPIOD, EN_5vReg_Pin, GPIO_PIN_SET);               // Turn on 5v REG
         	HAL_GPIO_WritePin(GPIOD, BT_INIT_Pin, GPIO_PIN_SET); 				// Turn on BT
         	AveragedBil=0;//to Erase the old test from LCD while applying new one
 
@@ -523,7 +528,7 @@ void EditRTC() {
 	LCD();
 }
 
-
+bool x = true;
 // Function to calculate battery percentage
 void BatteryPercentage(void) {                  //NOTE: With TMR: Calculate Percenatge Every 5 sec & Filter Window = 5 & UPDATE_THRESHOLD = 5
 
@@ -545,9 +550,22 @@ void BatteryPercentage(void) {                  //NOTE: With TMR: Calculate Perc
 
     // Calculate battery percentage based on filtered voltage
 	percentage = CalculateBatteryPercentage(filteredVoltage);
-
+//************************************************************************//
+	if(percentage>0 && percentage<5){				   // ULTRA LOW BATT
+		//Enter_Standby_Mode();
+	}
+	/*else if(percentage<20){                // LOW BATT
+		 if(x){
+			 ssd1306_SetCursor(100, 15);
+			 ssd1306_WriteString("LOW", Font_6x8, White);
+			 x=!x;
+		 }else{
+			 ssd1306_SetCursor(100, 15);
+			 ssd1306_FillRectangle(100, 13, 120, 16, Black);
+			 x=!x;
+		 }
+	}*/
 }
-
 
 float CalculateBatteryPercentage(float batteryVoltage) {
     float percentage;
@@ -625,7 +643,7 @@ const uint8_t* GetBatteryIcon(float percentage) {
 void TIM1_TRG_COM_TIM11_IRQHandler(void) {
 	if (TIM11->SR & TIM_SR_UIF) { // Check interrupt flag
 		TIM11->SR &= ~TIM_SR_UIF; // Clear interrupt flag
-		BatteryPercentage();      //calculate batt percentage , Every 5 second
+		BatteryPercentage();      //calculate batt percentage , Every 2 second
 	}
 }
 void TIM1_UP_TIM10_IRQHandler(void) {
@@ -635,7 +653,7 @@ void TIM1_UP_TIM10_IRQHandler(void) {
 
 		inactivityCounter++;      //StandBy Counter 1 sec
 		if (inactivityCounter >= TimeToStandBy){           // standBy after 120 sec
-			Enter_Standby_Mode();
+			//Enter_Standby_Mode();
 		}
 	}
 }
@@ -657,7 +675,7 @@ AveragedBil = SumBil / avgValue;
 
 // Function to reset the menu to the initial state
 void LCD_Reset(void) {
-    currentMenu = MENU_SET_AVG;
+    currentMenu = MENU_START_DEV;//MENU_SET_AVG;
     currentCursor = CURSOR_ON_MENU;
     avgValue = 1;
     currentTest = 1;

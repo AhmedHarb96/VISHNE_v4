@@ -469,9 +469,9 @@ static void MX_TIM10_Init(void)
 
   /* USER CODE END TIM10_Init 1 */
   htim10.Instance = TIM10;
-  htim10.Init.Prescaler = 168000-1;//36000-1;
+  htim10.Init.Prescaler = 36000-1;
   htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = 1000-1;//30000-1;
+  htim10.Init.Period = 30000-1;
   htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim10.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
@@ -710,8 +710,8 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin|READY_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin|BT_INIT_Pin|LCD_CE_Pin|LCD_DC_Pin
-                          |LCD_RST_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin|BT_INIT_Pin|EN_5vReg_Pin|LCD_CE_Pin
+                          |LCD_DC_Pin|LCD_RST_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, SPEC_START_Pin|SPEC_GAIN_Pin, GPIO_PIN_RESET);
@@ -761,10 +761,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(IsCharging_EXTI_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : Bcode_INIT_Pin BT_INIT_Pin LCD_CE_Pin LCD_DC_Pin
-                           LCD_RST_Pin */
-  GPIO_InitStruct.Pin = Bcode_INIT_Pin|BT_INIT_Pin|LCD_CE_Pin|LCD_DC_Pin
-                          |LCD_RST_Pin;
+  /*Configure GPIO pins : Bcode_INIT_Pin BT_INIT_Pin EN_5vReg_Pin LCD_CE_Pin
+                           LCD_DC_Pin LCD_RST_Pin */
+  GPIO_InitStruct.Pin = Bcode_INIT_Pin|BT_INIT_Pin|EN_5vReg_Pin|LCD_CE_Pin
+                          |LCD_DC_Pin|LCD_RST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

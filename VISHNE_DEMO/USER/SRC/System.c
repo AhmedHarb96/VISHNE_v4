@@ -48,7 +48,8 @@ void SpectrometerSetup(void)
 
 void LCD_Setup(void)
 {
-	  HAL_GPIO_WritePin(GPIOA, SPEC_LED_Pin, GPIO_PIN_RESET); // Turn off the SPEC LED
+	  HAL_GPIO_WritePin(GPIOD, EN_5vReg_Pin, GPIO_PIN_RESET);                   // Turn off 5v REG
+	  HAL_GPIO_WritePin(GPIOA, SPEC_LED_Pin, GPIO_PIN_RESET); 					// Turn off the SPEC LED
 	  ssd1306_Init();
 
 	  BatteryLevelFilterInit();
@@ -58,7 +59,7 @@ void LCD_Setup(void)
 
 	  //ChargerDetect_Init();
 
-	  Aymed_Logo();
+	  //Aymed_Logo();
 	  //Aymed_Text();      //moved to LCD.c
 }
 
