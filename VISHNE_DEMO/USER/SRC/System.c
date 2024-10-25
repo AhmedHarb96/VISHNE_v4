@@ -7,6 +7,8 @@
 #include "../INC/generalHeaders.h"
 #include "ssd1306.h"
 #include "ssd1306_fonts.h"
+#include "sensor.h"
+#include "bluenrg1_events.h"
 
 int logo_time = 1500;    //2500
 int text_time = 2500;    //2000
@@ -15,6 +17,15 @@ int text_time = 2500;    //2000
 float adcReadings[FILTER_SIZE]; // Array to store ADC samples
 float lastPercentage;           // Initialize last percentage to an invalid value
 bool isCharging = false;
+
+// Prepare the data you want to send (example data)
+uint8_t myCustomData[2] = {14, 15}; // Example custom data
+tBleStatus ret;
+uint8_t buff_Temp[2];
+// Global variables for BLE service and characteristic handles
+uint16_t service_handle;
+uint16_t char_handle;
+//static uint16_t connection_handle;
 
 void systemLoop(void)
 {
@@ -30,26 +41,32 @@ void systemSetup(void)
 	  RTC_Init();
 	  USB_Setup();
 	  FLASH_Setup();
-	 // ReadBilResultsFromFlash(readFlashedData);
+	  BLE_Setup();
 	  Wakeup_Init();      // Check if the system woke up from Standby
 }
 
+
+
 //################################################################################################//
+
+
 
 void SpectrometerSetup(void)
 {
 	  TIM1->CCR1=5;  //50   50% Duty Cycle ==> to generate 135khz
 	  HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
 
-	  HAL_GPIO_WritePin(GPIOB, SPEC_START_Pin, GPIO_PIN_SET);
-	  HAL_GPIO_WritePin(GPIOB, SPEC_CLK_Pin|SPEC_EOS_Pin|SPEC_GAIN_Pin, GPIO_PIN_RESET);
-	  HAL_GPIO_WritePin(GPIOA, SPEC_LED_Pin, GPIO_PIN_RESET); // Turn off the SPEC LED
+	  HAL_GPIO_WritePin(SPEC_START_GPIO_Port, SPEC_START_Pin, GPIO_PIN_SET);
+	  HAL_GPIO_WritePin(SPEC_CLK_GPIO_Port, SPEC_CLK_Pin, GPIO_PIN_RESET);
+	  HAL_GPIO_WritePin(SPEC_GAIN_GPIO_Port, SPEC_GAIN_Pin, GPIO_PIN_RESET);
+	  HAL_GPIO_WritePin(SPEC_EOS_GPIO_Port, SPEC_EOS_Pin, GPIO_PIN_RESET);
+	  HAL_GPIO_WritePin(SPEC_LED_GPIO_Port, SPEC_LED_Pin, GPIO_PIN_RESET); // Turn off the SPEC LED
 }
 
 void LCD_Setup(void)
 {
-	  HAL_GPIO_WritePin(GPIOD, EN_5vReg_Pin, GPIO_PIN_RESET);                   // Turn off 5v REG
-	  HAL_GPIO_WritePin(GPIOA, SPEC_LED_Pin, GPIO_PIN_RESET); 					// Turn off the SPEC LED
+	  HAL_GPIO_WritePin(EN_5vReg_GPIO_Port, EN_5vReg_Pin, GPIO_PIN_RESET);                   // Turn off 5v REG
+	  HAL_GPIO_WritePin(SPEC_LED_GPIO_Port, SPEC_LED_Pin, GPIO_PIN_RESET); 					// Turn off the SPEC LED
 	  ssd1306_Init();
 
 	  BatteryLevelFilterInit();
@@ -59,7 +76,7 @@ void LCD_Setup(void)
 
 	  //ChargerDetect_Init();
 
-	  //Aymed_Logo();
+	  Aymed_Logo();
 	  //Aymed_Text();      //moved to LCD.c
 }
 
@@ -76,6 +93,54 @@ void FLASH_Setup(void){
 	  FindLastBilResultIndex();// On startup, find the last valid index in the flash memory
 
 }
+//Handle_Packets_Pair_Entry_t xy;
+void BLE_Setup(void){
+	// Initialization of the BLE stack
+	  	 //tBleStatus ret = BLE_STATUS_SUCCESS;
+	  	// Initialize the BlueNRG hardware (assuming this is done elsewhere in your setup code)
+	  	 //hci_init(UserEvtRx, transport_layer_init);
+	    // Initialize GATT and GAP
+	     ret = aci_gatt_init();
+	     ret = aci_gap_init(GAP_PERIPHERAL_ROLE, 0, 0x07, &service_handle, NULL, NULL);
+	     // Add custom service and characteristic
+	     Add_Custom_Service();
+	     // Start the MTU exchange process to request a larger MTU size
+	     //uint16_t desired_MTU_size = 64;  // Set desired MTU size (e.g., 64 bytes)
+	     //aci_gatt_exchange_config(xy.Connection_Handle);
+	     // Make the device discoverable (set as connectable)
+	     //aci_gap_set_discoverable(ADV_IND, 0x20, 0x30, PUBLIC_ADDR, NO_WHITE_LIST_USE,0, NULL, 0, NULL, 0, 0);
+}
+
+//=============================    BLE Init FNs      ===============================
+// Function to add a custom service and characteristic
+void Add_Custom_Service(void){
+    //tBleStatus ret;
+    Service_UUID_t service_uuid;
+    Char_UUID_t char_uuid;
+
+    // Example UUIDs for the service and characteristic (16-bit UUID)
+    service_uuid.Service_UUID_16 = 0x1234;   // Example service UUID
+    char_uuid.Char_UUID_16 = 0x5678;         // Example characteristic UUID
+
+    // Add custom service
+    ret = aci_gatt_add_service(UUID_TYPE_16, &service_uuid, PRIMARY_SERVICE, 7, &service_handle);
+
+    // Add custom characteristic (read/write, 20 bytes max size)
+    ret = aci_gatt_add_char(service_handle, UUID_TYPE_16, &char_uuid, 20,
+                            CHAR_PROP_READ | CHAR_PROP_WRITE | CHAR_PROP_NOTIFY,
+                            ATTR_PERMISSION_NONE, GATT_NOTIFY_ATTRIBUTE_WRITE,
+                            16, 1, &char_handle);
+}
+void UserEvtRx(void *pData){
+    hci_notify_asynch_evt((void*)pData);
+}
+
+// Example transport layer initialization (depends on your setup, UART, SPI, etc.)
+void transport_layer_init(void){
+    // Initialize the transport layer here (e.g., UART or SPI communication)
+}
+//====================================================================================
+
 //################################################################################################//
 
 void Aymed_Logo(void)
@@ -142,8 +207,8 @@ void TIM10_Init(void) {                     //dotCounter++; && Standby_Mode ctr
 }
 // ################################################# Standby Mode ######################################## //
 void Enter_Standby_Mode(void){
-	HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(GPIOD, BT_INIT_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(Bcode_INIT_GPIO_Port, Bcode_INIT_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(BT_INIT_GPIO_Port, BT_INIT_Pin, GPIO_PIN_RESET);
 
     // Enable wake-up sources (RTC or external pin)
     HAL_PWR_EnableWakeUpPin(PWR_WAKEUP_PIN1);  // Wake-up from PA0 (WKUP pin)

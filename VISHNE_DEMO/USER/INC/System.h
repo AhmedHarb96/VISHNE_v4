@@ -17,6 +17,14 @@ void SpectrometerSetup(void);
 void LCD_Setup(void);
 void USB_Setup(void);
 void FLASH_Setup(void);
+void BLE_Setup(void);
+void Add_Custom_Service(void);
+void UserEvtRx(void *pData);
+void transport_layer_init(void);
+
+extern uint8_t myCustomData[2];
+extern uint16_t service_handle;
+extern uint16_t char_handle;
 
 void Aymed_Logo(void);
 void Aymed_Text(void);

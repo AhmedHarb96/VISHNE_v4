@@ -110,12 +110,12 @@ void capture_and_send_data(void)
 	//BilResult[0]=(1.7016*average_Reflectance*average_Reflectance)-(20.6755*average_Reflectance)+(66.9023);
 	 BilResult = (average_filtered_data-478)/120;     //avgSpecAtBlank_Ref = 478   //CalFactor=56;//80
 	 if(BilResult<=0.1) {
-		 HAL_GPIO_WritePin(GPIOA, SPEC_LED_Pin, GPIO_PIN_RESET);
+		 HAL_GPIO_WritePin(SPEC_LED_GPIO_Port, SPEC_LED_Pin, GPIO_PIN_RESET);
 		 testDone = 0;
 		 BilResult=0;
-		 HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin, GPIO_PIN_SET);   // ***** ERROR Buzzer ***//
+		 HAL_GPIO_WritePin(ERR_BUZZER_GPIO_Port, ERR_BUZZER_Pin, GPIO_PIN_SET);   // ***** ERROR Buzzer ***//
 		 HAL_Delay(200);
-		 HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin, GPIO_PIN_RESET); // ***** ERROR Buzzer ***//
+		 HAL_GPIO_WritePin(ERR_BUZZER_GPIO_Port, ERR_BUZZER_Pin, GPIO_PIN_RESET); // ***** ERROR Buzzer ***//
 	 }
 	 else{
 	 testDone = 1;

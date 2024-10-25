@@ -20,9 +20,9 @@ void spectrometer(void){
 			//Send_TO_BLE();												 // Send Patient Data to ESP_BLE -> moved to LCD.c
 
 		}else if (StartTestMenuFlag==2) {                               // if current menu != StartTest
-			 HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin, GPIO_PIN_SET);   // ***** ERROR Buzzer ***//
+			 HAL_GPIO_WritePin(ERR_BUZZER_GPIO_Port, ERR_BUZZER_Pin, GPIO_PIN_SET);   // ***** ERROR Buzzer ***//
 			 HAL_Delay(500);
-			 HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin, GPIO_PIN_RESET); // ***** ERROR Buzzer ***//
+			 HAL_GPIO_WritePin(ERR_BUZZER_GPIO_Port, ERR_BUZZER_Pin, GPIO_PIN_RESET); // ***** ERROR Buzzer ***//
 		}
 	}
 }
@@ -30,23 +30,23 @@ void spectrometer(void){
 void generate_spectrometer_signals(void){
 
 	// Button is pressed
-	HAL_GPIO_WritePin(GPIOA, SPEC_LED_Pin, GPIO_PIN_SET); 				// Turn on the LED
+	HAL_GPIO_WritePin(SPEC_LED_GPIO_Port, SPEC_LED_Pin, GPIO_PIN_SET); 				// Turn on the LED
 	HAL_Delay(1); // Wait for stabilization
 
 	// Generate start signal for the spectrometer
-	HAL_GPIO_WritePin(GPIOB, SPEC_START_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(SPEC_START_GPIO_Port, SPEC_START_Pin, GPIO_PIN_RESET);
 	//DWT_Delay(1);
 	HAL_Delay(1);
-	HAL_GPIO_WritePin(GPIOB, SPEC_START_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(SPEC_START_GPIO_Port, SPEC_START_Pin, GPIO_PIN_SET);
 	HAL_Delay(20); //8//500 									// Higher integration time Higher Spectrum Amplitude
-	HAL_GPIO_WritePin(GPIOB, SPEC_START_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(SPEC_START_GPIO_Port, SPEC_START_Pin, GPIO_PIN_RESET);
 	HAL_Delay(1);
-	HAL_GPIO_WritePin(GPIOB, SPEC_START_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(SPEC_START_GPIO_Port, SPEC_START_Pin, GPIO_PIN_SET);
 
 	// Wait for EOS signal
 	//while (!eos_received) {}
 	capture_and_send_data();
-	HAL_GPIO_WritePin(GPIOA, SPEC_LED_Pin, GPIO_PIN_RESET); 			// Turn off the LED
+	HAL_GPIO_WritePin(SPEC_LED_GPIO_Port, SPEC_LED_Pin, GPIO_PIN_RESET); 			// Turn off the LED
 	eos_received = 0;
 
 }

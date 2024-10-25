@@ -39,6 +39,10 @@ Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_pipes.o: \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
+ ../BlueNRG_2/Target/hci_tl_interface.h ../Core/Inc/custom_bus.h \
+ ../Core/Inc/custom_conf.h ../Drivers/BSP/custom/custom_errno.h \
+ ../Drivers/BSP/custom/custom.h ../Core/Inc/custom_conf.h \
+ ../Drivers/BSP/custom/custom_errno.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_def.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ioreq.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_pipes.h \
@@ -83,6 +87,13 @@ Middlewares/ST/STM32_USB_Host_Library/Core/Src/usbh_pipes.o: \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
+../BlueNRG_2/Target/hci_tl_interface.h:
+../Core/Inc/custom_bus.h:
+../Core/Inc/custom_conf.h:
+../Drivers/BSP/custom/custom_errno.h:
+../Drivers/BSP/custom/custom.h:
+../Core/Inc/custom_conf.h:
+../Drivers/BSP/custom/custom_errno.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_def.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ioreq.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_pipes.h:

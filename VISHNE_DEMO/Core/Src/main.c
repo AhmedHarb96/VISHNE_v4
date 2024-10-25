@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "app_bluenrg_2.h"
 #include "usb_host.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -61,9 +62,7 @@ TIM_HandleTypeDef htim13;
 DMA_HandleTypeDef hdma_tim1_ch1;
 
 UART_HandleTypeDef huart2;
-UART_HandleTypeDef huart3;
 DMA_HandleTypeDef hdma_usart2_tx;
-DMA_HandleTypeDef hdma_usart3_tx;
 
 /* USER CODE BEGIN PV */
 
@@ -80,7 +79,6 @@ static void MX_SPI3_Init(void);
 static void MX_I2C3_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM11_Init(void);
-static void MX_USART3_UART_Init(void);
 static void MX_TIM10_Init(void);
 static void MX_TIM13_Init(void);
 void MX_USB_HOST_Process(void);
@@ -91,6 +89,7 @@ void MX_USB_HOST_Process(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
 
 /* USER CODE END 0 */
 
@@ -131,14 +130,15 @@ int main(void)
   MX_I2C3_Init();
   MX_ADC1_Init();
   MX_TIM11_Init();
-  MX_USART3_UART_Init();
   MX_USB_HOST_Init();
   MX_TIM10_Init();
   MX_TIM13_Init();
+  MX_BlueNRG_2_Init();
   /* USER CODE BEGIN 2 */
   DWT_Init();
 
   systemSetup();
+
 
   /* USER CODE END 2 */
 
@@ -149,8 +149,9 @@ int main(void)
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();
 
+    //MX_BlueNRG_2_Process();
     /* USER CODE BEGIN 3 */
-	 systemLoop();
+	systemLoop();
   }
   /* USER CODE END 3 */
 }
@@ -620,39 +621,6 @@ static void MX_USART2_UART_Init(void)
 }
 
 /**
-  * @brief USART3 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART3_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART3_Init 0 */
-
-  /* USER CODE END USART3_Init 0 */
-
-  /* USER CODE BEGIN USART3_Init 1 */
-
-  /* USER CODE END USART3_Init 1 */
-  huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
-  huart3.Init.WordLength = UART_WORDLENGTH_8B;
-  huart3.Init.StopBits = UART_STOPBITS_1;
-  huart3.Init.Parity = UART_PARITY_NONE;
-  huart3.Init.Mode = UART_MODE_TX_RX;
-  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART3_Init 2 */
-
-  /* USER CODE END USART3_Init 2 */
-
-}
-
-/**
   * Enable DMA controller clock
   */
 static void MX_DMA_Init(void)
@@ -663,9 +631,6 @@ static void MX_DMA_Init(void)
   __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
-  /* DMA1_Stream3_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
   /* DMA1_Stream6_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
@@ -693,11 +658,11 @@ static void MX_GPIO_Init(void)
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
@@ -707,7 +672,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(SPEC_LED_GPIO_Port, SPEC_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin|READY_LED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, ERR_BUZZER_Pin|READY_LED_Pin|BLE_RST_Pin|BLE_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin|BT_INIT_Pin|EN_5vReg_Pin|LCD_CE_Pin
@@ -715,6 +680,12 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, SPEC_START_Pin|SPEC_GAIN_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : BLE_EXTI_Pin */
+  GPIO_InitStruct.Pin = BLE_EXTI_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BLE_EXTI_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PC0 */
   GPIO_InitStruct.Pin = GPIO_PIN_0;
@@ -742,8 +713,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(SPEC_LED_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ERR_BUZZER_Pin READY_LED_Pin */
-  GPIO_InitStruct.Pin = ERR_BUZZER_Pin|READY_LED_Pin;
+  /*Configure GPIO pins : ERR_BUZZER_Pin READY_LED_Pin BLE_RST_Pin BLE_CS_Pin */
+  GPIO_InitStruct.Pin = ERR_BUZZER_Pin|READY_LED_Pin|BLE_RST_Pin|BLE_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -776,6 +747,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI2_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI3_IRQn);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
   /* EXTI interrupt init */

@@ -112,14 +112,14 @@ void LCD(void)
 // Function to display the current menu
 void LCD_DisplayMenu(void) {
     ssd1306_Fill(Black);
-    HAL_GPIO_WritePin(GPIOE, READY_LED_Pin, GPIO_PIN_RESET); // Turn off Indication LED
+    HAL_GPIO_WritePin(READY_LED_GPIO_Port, READY_LED_Pin, GPIO_PIN_RESET); // Turn off Indication LED
     DisplayPercentage();
     RTC_DisplayTime();
     TimeSetDone=0;
     //strncpy(entry.patientID, ID, sizeof(entry.patientID));  // Copy the ID
-    HAL_GPIO_WritePin(GPIOD, EN_5vReg_Pin, GPIO_PIN_RESET);                 // Turn off 5v REG
-    HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin, GPIO_PIN_RESET); 				// Turn off Barcode
-    HAL_GPIO_WritePin(GPIOD, BT_INIT_Pin, GPIO_PIN_RESET); 				    // Turn off BT
+    HAL_GPIO_WritePin(EN_5vReg_GPIO_Port, EN_5vReg_Pin, GPIO_PIN_RESET);                 // Turn off 5v REG
+    HAL_GPIO_WritePin(Bcode_INIT_GPIO_Port, Bcode_INIT_Pin, GPIO_PIN_RESET); 				// Turn off Barcode
+    HAL_GPIO_WritePin(BT_INIT_GPIO_Port, BT_INIT_Pin, GPIO_PIN_RESET); 				    // Turn off BT
 
     switch (currentMenu)
     {
@@ -138,9 +138,9 @@ void LCD_DisplayMenu(void) {
     		break;
       // New menu for scanning patient ID
 		case MENU_READ_ID:
-			HAL_GPIO_WritePin(GPIOD, EN_5vReg_Pin, GPIO_PIN_SET);                   // Turn on 5v REG
+			HAL_GPIO_WritePin(EN_5vReg_GPIO_Port, EN_5vReg_Pin, GPIO_PIN_SET);                   // Turn on 5v REG
 			//HAL_Delay(10);
-			HAL_GPIO_WritePin(GPIOD, Bcode_INIT_Pin, GPIO_PIN_SET); 				// Turn on BarCode Reader
+			HAL_GPIO_WritePin(Bcode_INIT_GPIO_Port, Bcode_INIT_Pin, GPIO_PIN_SET); 				// Turn on BarCode Reader
 			ssd1306_SetCursor(5, 56);
 			ssd1306_WriteString("PREV", Font_6x8, White);		    // Prev btn (left)
 			ssd1306_SetCursor(102, 56);
@@ -196,7 +196,6 @@ void LCD_DisplayMenu(void) {
 				ssd1306_WriteString("Set AVG", Font_7x10, White);
         	}
 
-
             if (currentCursor == CURSOR_ON_VALUE) {
             	ssd1306_FillRectangle(set_line_X, set_line_Y, 72, 52, White);
             	ssd1306_SetCursor(set_line_X , set_line_Y);
@@ -214,7 +213,7 @@ void LCD_DisplayMenu(void) {
             break;
 
         case MENU_START_TEST:
-        	HAL_GPIO_WritePin(GPIOD, EN_5vReg_Pin, GPIO_PIN_SET);                   // Turn on 5v REG
+        	HAL_GPIO_WritePin(EN_5vReg_GPIO_Port, EN_5vReg_Pin, GPIO_PIN_SET);                   // Turn on 5v REG
 			ssd1306_SetCursor(5, 56);
 			ssd1306_WriteString("PREV", Font_6x8, White);		    // Prev btn (left)
 			ssd1306_SetCursor(102, 56);
@@ -239,10 +238,12 @@ void LCD_DisplayMenu(void) {
             if (currentTest > avgValue){
             	currentTest = 1;
             	//*********Bil_AVG and FlashWrite***********//
-            	MeasureAverage(); //HAL_Delay(10);
+            	MeasureAverage();
+            	//HAL_Delay(10);
             	SaveBilResultToFlash();
             	//************RESET************************//
-				for (int i = 0; i <= 12-1; i++) BilArray[i]=0;
+				//for (int i = 0; i <= 12-1; i++) BilArray[i]=0;
+				memset(BilArray, 0, sizeof(BilArray));
 				SumBil = 0;
 				//AveragedBil = 0;                 // Flashing done but Displaying on LCD -> can not reset
 				BilResult=0;
@@ -254,7 +255,7 @@ void LCD_DisplayMenu(void) {
                 LCD_DisplayMenu();
             } else {                                   // Test not performed yet
                 // Turn on the indication LED (READY)
-                HAL_GPIO_WritePin(GPIOE, READY_LED_Pin, GPIO_PIN_SET); 			// IND LED
+                HAL_GPIO_WritePin(READY_LED_GPIO_Port, READY_LED_Pin, GPIO_PIN_SET); 			// IND LED
             }
             break;
 
@@ -316,8 +317,9 @@ void LCD_DisplayMenu(void) {
 			break;
 
         case MENU_SEND_BLE:
-        	HAL_GPIO_WritePin(GPIOD, EN_5vReg_Pin, GPIO_PIN_SET);               // Turn on 5v REG
-        	HAL_GPIO_WritePin(GPIOD, BT_INIT_Pin, GPIO_PIN_SET); 				// Turn on BT
+        	HAL_GPIO_WritePin(EN_5vReg_GPIO_Port, EN_5vReg_Pin, GPIO_PIN_SET);               // Turn on 5v REG
+        	Set_DeviceConnectable();
+        	//HAL_GPIO_WritePin(BT_INIT_GPIO_Port, BT_INIT_Pin, GPIO_PIN_SET); 				// Turn on BT
         	AveragedBil=0;//to Erase the old test from LCD while applying new one
 
 			ssd1306_SetCursor(5, 56);
@@ -552,7 +554,7 @@ void BatteryPercentage(void) {                  //NOTE: With TMR: Calculate Perc
 	percentage = CalculateBatteryPercentage(filteredVoltage);
 //************************************************************************//
 	if(percentage>0 && percentage<5){				   // ULTRA LOW BATT
-		//Enter_Standby_Mode();
+		Enter_Standby_Mode();
 	}
 	/*else if(percentage<20){                // LOW BATT
 		 if(x){
@@ -653,7 +655,7 @@ void TIM1_UP_TIM10_IRQHandler(void) {
 
 		inactivityCounter++;      //StandBy Counter 1 sec
 		if (inactivityCounter >= TimeToStandBy){           // standBy after 120 sec
-			//Enter_Standby_Mode();
+			Enter_Standby_Mode();
 		}
 	}
 }
@@ -686,7 +688,7 @@ void LCD_Reset(void) {
     BilResult=0;
     testDone=0;
     //***********************************//
-    HAL_GPIO_WritePin(GPIOE, READY_LED_Pin, GPIO_PIN_RESET); // Turn off the LED
+    HAL_GPIO_WritePin(READY_LED_GPIO_Port, READY_LED_Pin, GPIO_PIN_RESET); // Turn off the LED
     LCD_UpdateMenu();
 }
 
@@ -699,7 +701,7 @@ void DoesTestComplete(void) {
 		BilArray[currentTest]=BilResult;
 		BilResult=0;
 
-		HAL_GPIO_WritePin(GPIOE, READY_LED_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(READY_LED_GPIO_Port, READY_LED_Pin, GPIO_PIN_RESET);
 		HAL_Delay(Tests_Intratime);     // Time between Tests
 
 		currentTest++;

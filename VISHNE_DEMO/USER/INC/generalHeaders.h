@@ -14,6 +14,11 @@
 #include "Flash.h"
 #include "Barcode.h"
 
+#include "app_bluenrg_2.h"
+#include "gatt_db.h"
+#include "bluenrg1_gatt_aci.h"
+#include "bluenrg_utils.h"
+
 extern ADC_HandleTypeDef hadc3;
 extern DMA_HandleTypeDef hdma_adc3;
 

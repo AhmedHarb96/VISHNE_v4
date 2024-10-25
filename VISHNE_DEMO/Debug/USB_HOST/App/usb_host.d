@@ -38,6 +38,10 @@ USB_HOST/App/usb_host.o: ../USB_HOST/App/usb_host.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h \
  ../USB_HOST/Target/usbh_conf.h ../Core/Inc/main.h \
+ ../BlueNRG_2/Target/hci_tl_interface.h ../Core/Inc/custom_bus.h \
+ ../Core/Inc/custom_conf.h ../Drivers/BSP/custom/custom_errno.h \
+ ../Drivers/BSP/custom/custom.h ../Core/Inc/custom_conf.h \
+ ../Drivers/BSP/custom/custom_errno.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_def.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ioreq.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h \
@@ -87,6 +91,13 @@ USB_HOST/App/usb_host.o: ../USB_HOST/App/usb_host.c \
 ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h:
 ../USB_HOST/Target/usbh_conf.h:
 ../Core/Inc/main.h:
+../BlueNRG_2/Target/hci_tl_interface.h:
+../Core/Inc/custom_bus.h:
+../Core/Inc/custom_conf.h:
+../Drivers/BSP/custom/custom_errno.h:
+../Drivers/BSP/custom/custom.h:
+../Core/Inc/custom_conf.h:
+../Drivers/BSP/custom/custom_errno.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_def.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_ioreq.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h:

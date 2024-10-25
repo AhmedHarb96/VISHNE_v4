@@ -14,9 +14,16 @@ RM := rm -rf
 -include USB_HOST/App/subdir.mk
 -include Middlewares/ST/STM32_USB_Host_Library/Core/Src/subdir.mk
 -include Middlewares/ST/STM32_USB_Host_Library/Class/HID/Src/subdir.mk
+-include Middlewares/ST/BlueNRG-2/utils/subdir.mk
+-include Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic/subdir.mk
+-include Middlewares/ST/BlueNRG-2/hci/controller/subdir.mk
+-include Middlewares/ST/BlueNRG-2/hci/subdir.mk
 -include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
+-include Drivers/BSP/custom/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
+-include BlueNRG_2/Target/subdir.mk
+-include BlueNRG_2/App/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)

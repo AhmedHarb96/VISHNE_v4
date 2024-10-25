@@ -36,11 +36,14 @@ USER/SRC/System.o: ../USER/SRC/System.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
- ../USER/SRC/../INC/System.h ../USER/SRC/../INC/generalHeaders.h \
- ../USER/SRC/../INC/Calculation.h ../USER/SRC/../INC/Spectrometer.h \
- ../USER/SRC/../INC/LCD.h ../USER/SRC/../INC/RTC.h \
- ../USER/SRC/../INC/Flash.h ../USER/SRC/../INC/Barcode.h \
- ../USB_HOST/App/usb_host.h \
+ ../BlueNRG_2/Target/hci_tl_interface.h ../Core/Inc/custom_bus.h \
+ ../Core/Inc/custom_conf.h ../Drivers/BSP/custom/custom_errno.h \
+ ../Drivers/BSP/custom/custom.h ../Core/Inc/custom_conf.h \
+ ../Drivers/BSP/custom/custom_errno.h ../USER/SRC/../INC/System.h \
+ ../USER/SRC/../INC/generalHeaders.h ../USER/SRC/../INC/Calculation.h \
+ ../USER/SRC/../INC/Spectrometer.h ../USER/SRC/../INC/LCD.h \
+ ../USER/SRC/../INC/RTC.h ../USER/SRC/../INC/Flash.h \
+ ../USER/SRC/../INC/Barcode.h ../USB_HOST/App/usb_host.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h \
  ../USB_HOST/Target/usbh_conf.h \
@@ -53,6 +56,27 @@ USER/SRC/System.o: ../USER/SRC/System.c \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h \
+ ../BlueNRG_2/App/app_bluenrg_2.h ../BlueNRG_2/App/gatt_db.h \
+ ../Middlewares/ST/BlueNRG-2/includes/hci.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg1_types.h \
+ ../Middlewares/ST/BlueNRG-2/includes/compiler.h \
+ ../Middlewares/ST/BlueNRG-2/includes/ble_const.h \
+ ../Middlewares/ST/BlueNRG-2/includes/hci_const.h \
+ ../Middlewares/ST/BlueNRG-2/includes/link_layer.h \
+ ../Middlewares/ST/BlueNRG-2/includes/ble_types.h \
+ ../Middlewares/ST/BlueNRG-2/includes/ble_status.h \
+ ../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic/hci_tl.h \
+ ../Middlewares/ST/BlueNRG-2/includes/ble_types.h \
+ ../Middlewares/ST/BlueNRG-2/utils/ble_list.h \
+ ../BlueNRG_2/Target/bluenrg_conf.h \
+ ../Middlewares/ST/BlueNRG-2/includes/ble_status.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg1_hal.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg1_gap.h \
+ ../Middlewares/ST/BlueNRG-2/includes/link_layer.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg1_gatt_server.h \
+ ../Middlewares/ST/BlueNRG-2/includes/sm.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg1_gatt_aci.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg_utils.h \
  ../Core/Inc/ssd1306.h ../Core/Inc/ssd1306_conf.h \
  ../Core/Inc/../../USER/INC/generalHeaders.h \
  ../Core/Inc/../../USER/INC/System.h \
@@ -60,7 +84,9 @@ USER/SRC/System.o: ../USER/SRC/System.c \
  ../Core/Inc/../../USER/INC/Spectrometer.h \
  ../Core/Inc/../../USER/INC/LCD.h ../Core/Inc/../../USER/INC/RTC.h \
  ../Core/Inc/../../USER/INC/Flash.h ../Core/Inc/../../USER/INC/Barcode.h \
- ../Core/Inc/ssd1306_fonts.h ../Core/Inc/ssd1306.h
+ ../Core/Inc/ssd1306_fonts.h ../Core/Inc/ssd1306.h \
+ ../BlueNRG_2/App/sensor.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg1_events.h
 ../USER/SRC/../INC/generalHeaders.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
@@ -99,6 +125,13 @@ USER/SRC/System.o: ../USER/SRC/System.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
+../BlueNRG_2/Target/hci_tl_interface.h:
+../Core/Inc/custom_bus.h:
+../Core/Inc/custom_conf.h:
+../Drivers/BSP/custom/custom_errno.h:
+../Drivers/BSP/custom/custom.h:
+../Core/Inc/custom_conf.h:
+../Drivers/BSP/custom/custom_errno.h:
 ../USER/SRC/../INC/System.h:
 ../USER/SRC/../INC/generalHeaders.h:
 ../USER/SRC/../INC/Calculation.h:
@@ -120,6 +153,28 @@ USER/SRC/System.o: ../USER/SRC/System.c \
 ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h:
+../BlueNRG_2/App/app_bluenrg_2.h:
+../BlueNRG_2/App/gatt_db.h:
+../Middlewares/ST/BlueNRG-2/includes/hci.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg1_types.h:
+../Middlewares/ST/BlueNRG-2/includes/compiler.h:
+../Middlewares/ST/BlueNRG-2/includes/ble_const.h:
+../Middlewares/ST/BlueNRG-2/includes/hci_const.h:
+../Middlewares/ST/BlueNRG-2/includes/link_layer.h:
+../Middlewares/ST/BlueNRG-2/includes/ble_types.h:
+../Middlewares/ST/BlueNRG-2/includes/ble_status.h:
+../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic/hci_tl.h:
+../Middlewares/ST/BlueNRG-2/includes/ble_types.h:
+../Middlewares/ST/BlueNRG-2/utils/ble_list.h:
+../BlueNRG_2/Target/bluenrg_conf.h:
+../Middlewares/ST/BlueNRG-2/includes/ble_status.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg1_hal.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg1_gap.h:
+../Middlewares/ST/BlueNRG-2/includes/link_layer.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg1_gatt_server.h:
+../Middlewares/ST/BlueNRG-2/includes/sm.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg1_gatt_aci.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg_utils.h:
 ../Core/Inc/ssd1306.h:
 ../Core/Inc/ssd1306_conf.h:
 ../Core/Inc/../../USER/INC/generalHeaders.h:
@@ -132,3 +187,5 @@ USER/SRC/System.o: ../USER/SRC/System.c \
 ../Core/Inc/../../USER/INC/Barcode.h:
 ../Core/Inc/ssd1306_fonts.h:
 ../Core/Inc/ssd1306.h:
+../BlueNRG_2/App/sensor.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg1_events.h:

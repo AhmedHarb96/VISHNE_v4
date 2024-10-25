@@ -37,7 +37,10 @@ Core/Src/ssd1306_fonts.o: ../Core/Src/ssd1306_fonts.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h \
- ../Core/Inc/../../USER/INC/System.h \
+ ../BlueNRG_2/Target/hci_tl_interface.h ../Core/Inc/custom_bus.h \
+ ../Core/Inc/custom_conf.h ../Drivers/BSP/custom/custom_errno.h \
+ ../Drivers/BSP/custom/custom.h ../Core/Inc/custom_conf.h \
+ ../Drivers/BSP/custom/custom_errno.h ../Core/Inc/../../USER/INC/System.h \
  ../Core/Inc/../../USER/INC/generalHeaders.h \
  ../Core/Inc/../../USER/INC/Calculation.h \
  ../Core/Inc/../../USER/INC/Spectrometer.h \
@@ -55,7 +58,28 @@ Core/Src/ssd1306_fonts.o: ../Core/Src/ssd1306_fonts.c \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_mouse.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h \
- ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h
+ ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h \
+ ../BlueNRG_2/App/app_bluenrg_2.h ../BlueNRG_2/App/gatt_db.h \
+ ../Middlewares/ST/BlueNRG-2/includes/hci.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg1_types.h \
+ ../Middlewares/ST/BlueNRG-2/includes/compiler.h \
+ ../Middlewares/ST/BlueNRG-2/includes/ble_const.h \
+ ../Middlewares/ST/BlueNRG-2/includes/hci_const.h \
+ ../Middlewares/ST/BlueNRG-2/includes/link_layer.h \
+ ../Middlewares/ST/BlueNRG-2/includes/ble_types.h \
+ ../Middlewares/ST/BlueNRG-2/includes/ble_status.h \
+ ../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic/hci_tl.h \
+ ../Middlewares/ST/BlueNRG-2/includes/ble_types.h \
+ ../Middlewares/ST/BlueNRG-2/utils/ble_list.h \
+ ../BlueNRG_2/Target/bluenrg_conf.h \
+ ../Middlewares/ST/BlueNRG-2/includes/ble_status.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg1_hal.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg1_gap.h \
+ ../Middlewares/ST/BlueNRG-2/includes/link_layer.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg1_gatt_server.h \
+ ../Middlewares/ST/BlueNRG-2/includes/sm.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg1_gatt_aci.h \
+ ../Middlewares/ST/BlueNRG-2/includes/bluenrg_utils.h
 ../Core/Inc/ssd1306_fonts.h:
 ../Core/Inc/ssd1306.h:
 ../Core/Inc/ssd1306_conf.h:
@@ -97,6 +121,13 @@ Core/Src/ssd1306_fonts.o: ../Core/Src/ssd1306_fonts.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_hcd.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h:
+../BlueNRG_2/Target/hci_tl_interface.h:
+../Core/Inc/custom_bus.h:
+../Core/Inc/custom_conf.h:
+../Drivers/BSP/custom/custom_errno.h:
+../Drivers/BSP/custom/custom.h:
+../Core/Inc/custom_conf.h:
+../Drivers/BSP/custom/custom_errno.h:
 ../Core/Inc/../../USER/INC/System.h:
 ../Core/Inc/../../USER/INC/generalHeaders.h:
 ../Core/Inc/../../USER/INC/Calculation.h:
@@ -118,3 +149,25 @@ Core/Src/ssd1306_fonts.o: ../Core/Src/ssd1306_fonts.c \
 ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Class/HID/Inc/usbh_hid_keybd.h:
+../BlueNRG_2/App/app_bluenrg_2.h:
+../BlueNRG_2/App/gatt_db.h:
+../Middlewares/ST/BlueNRG-2/includes/hci.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg1_types.h:
+../Middlewares/ST/BlueNRG-2/includes/compiler.h:
+../Middlewares/ST/BlueNRG-2/includes/ble_const.h:
+../Middlewares/ST/BlueNRG-2/includes/hci_const.h:
+../Middlewares/ST/BlueNRG-2/includes/link_layer.h:
+../Middlewares/ST/BlueNRG-2/includes/ble_types.h:
+../Middlewares/ST/BlueNRG-2/includes/ble_status.h:
+../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic/hci_tl.h:
+../Middlewares/ST/BlueNRG-2/includes/ble_types.h:
+../Middlewares/ST/BlueNRG-2/utils/ble_list.h:
+../BlueNRG_2/Target/bluenrg_conf.h:
+../Middlewares/ST/BlueNRG-2/includes/ble_status.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg1_hal.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg1_gap.h:
+../Middlewares/ST/BlueNRG-2/includes/link_layer.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg1_gatt_server.h:
+../Middlewares/ST/BlueNRG-2/includes/sm.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg1_gatt_aci.h:
+../Middlewares/ST/BlueNRG-2/includes/bluenrg_utils.h:
